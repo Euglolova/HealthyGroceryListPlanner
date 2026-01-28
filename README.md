@@ -1,3 +1,9 @@
 # HealthyGroceryListPlanner
+
 ComIT Dot Net Core Course Project
-testing
+
+
+I am testing
+
+Healthy Grocery List Planner
+
