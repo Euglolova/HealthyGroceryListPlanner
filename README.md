@@ -9,6 +9,14 @@ Healthy Grocery List Planner is a web application that helps users create and ma
 Users can add products with quantities, group them by categories, mark items as purchased, and manage their lists securely after authentication.  
 The project is built using ASP.NET Core MVC and follows clean architecture principles.
 
+ComIT Dot Net Core Course Project
+
+
+                          Project Overview
+
+Healthy Grocery List Planner is a web application that helps users create and manage grocery lists for healthy eating.  
+Users can add products with quantities, group them by categories, mark items as purchased, and manage their lists securely after authentication.  
+The project is built using ASP.NET Core MVC and follows clean architecture principles.
 
             
      
@@ -61,3 +69,4 @@ This screen allows users to add a new product to the grocery list.
 5. User marks products as purchased  
 6. User edits or deletes products if needed  
 7. User logs out 
+
