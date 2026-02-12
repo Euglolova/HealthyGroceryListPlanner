@@ -34,4 +34,32 @@ public class GroceryService
         }
     }
 
+    //Find a product by ID
+    //changes true or false
+    public void TogglePurchased(int productId)
+{
+    Product foundProduct = null;
+
+    foreach (Product product in _products)
+    {
+        if (product.Id == productId)
+        {
+            foundProduct = product;
+            break;
+        }
+    }
+
+    if (foundProduct != null)
+    {
+        if (foundProduct.IsPurchased == true)
+        {
+            foundProduct.IsPurchased = false;
+        }
+        else
+        {
+            foundProduct.IsPurchased = true;
+        }
+    }
+}
+
 }
