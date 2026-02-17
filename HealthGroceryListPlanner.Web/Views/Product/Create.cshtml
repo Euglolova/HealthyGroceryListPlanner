@@ -1,0 +1,30 @@
+@model HealthGroceryListPlanner.Web.Models.Product
+
+<h2>Add Product</h2>
+
+<form asp-action="Create" method="post">
+    <div class="form-group">
+        <label>Name</label>
+        <input asp-for="Name" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label>Quantity</label>
+        <input asp-for="Quantity" class="form-control" type="number" />
+    </div>
+
+    <div class="form-group">
+        <label>Category</label>
+        <input asp-for="Category" class="form-control" />
+    </div>
+
+    <div class="form-group form-check">
+        <input asp-for="IsPurchased" class="form-check-input" />
+        <label class="form-check-label">Purchased</label>
+    </div>
+
+    <br />
+
+    <button type="submit" class="btn btn-primary">Save Product</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+</form>

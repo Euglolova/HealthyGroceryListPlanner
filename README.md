@@ -60,6 +60,17 @@ This screen allows users to add a new product to the grocery list.
 - Save Product button  
 - Cancel button  
 
+### 4. Product Details Screen
+This screen displays detailed information about a selected product.
+**Screen elements:**
+-Product name
+-Quantity
+-Category
+-Purchased status
+-Edit button
+-Delete button
+-Back to Grocery List button
+                                
                                 Application Workflow
                                 
 1. User opens the application  

@@ -1,0 +1,28 @@
+@model List<HealthGroceryListPlanner.Web.Models.Product>
+
+<h2>Grocery List</h2>
+
+<table class="table">
+    <thead>
+        <a asp-action="Create" class="btn btn-success">Add Product</a>
+<br /><br />
+        <p>Total products: @Model.Count</p>
+        <tr>
+            <th>Name</th>
+            <th>Quantity</th>
+            <th>Category</th>
+            <th>Purchased</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var product in Model)
+        {
+            <tr>
+                <td>@product.Name</td>
+                <td>@product.Quantity</td>
+                <td>@product.Category</td>
+                <td>@product.IsPurchased</td>
+            </tr>
+        }
+    </tbody>
+</table>
