@@ -2,6 +2,8 @@ using Microsoft.AspNetCore.Mvc;
 using HealthGroceryListPlanner.Web.Data;
 using HealthGroceryListPlanner.Web.Models;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace HealthGroceryListPlanner.Web.Controllers
 {
@@ -20,7 +22,9 @@ namespace HealthGroceryListPlanner.Web.Controllers
         // =========================
         public IActionResult Index()
         {
-            var products = _context.Products.ToList();
+           var products = _context.Products
+                .Include(p => p.Category)
+                .ToList();
             return View(products);
         }
 
@@ -29,7 +33,8 @@ namespace HealthGroceryListPlanner.Web.Controllers
         // =========================
         public IActionResult Create()
         {
-            return View();
+                ViewBag.Categories = _context.Categories.ToList();
+                return View();
         }
 
         // =========================
@@ -45,8 +50,91 @@ namespace HealthGroceryListPlanner.Web.Controllers
                 _context.SaveChanges();
                 return RedirectToAction("Index");
             }
+            
+            ViewBag.Categories = _context.Categories.ToList();
+            return View(product);
+        }
+        // =========================
+        // Product Details Screen
+        // =========================
+        public IActionResult Details(int id)
+        {
+            var product = _context.Products
+            .Include(p => p.Category)
+            .FirstOrDefault(p => p.Id == id);
+
+            if (product == null)
+            {
+                return NotFound();
+            }
+
+            return View(product);
+            // =========================
+            // Edit Product (GET)
+            // =========================
+        }
+        public IActionResult Edit(int id)
+        {
+        var product = _context.Products.Find(id);
+
+            if (product == null)
+            {   
+                return NotFound();
+            }
+
+            ViewBag.Categories = _context.Categories.ToList();
+            return View(product);
+        }
+
+        // =========================
+        // Edit Product (POST)
+        // =========================
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Edit(Product product)
+        {
+            if (ModelState.IsValid)
+            {
+                _context.Products.Update(product);
+                _context.SaveChanges();
+                return RedirectToAction("Index");
+            }
+
+            ViewBag.Categories = _context.Categories.ToList();
+            return View(product);
+        }
+        // =========================
+        // Delete Product (GET)
+        // =========================
+        public IActionResult Delete(int id)
+        {
+            var product = _context.Products.Find(id);
+
+            if (product == null)
+            {
+                return NotFound();
+            }
 
             return View(product);
         }
+
+        // =========================
+        // Delete Product (POST)
+        // =========================
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public IActionResult DeleteConfirmed(int id)
+        {
+            var product = _context.Products.Find(id);
+
+            if (product != null)
+            {
+                _context.Products.Remove(product);
+                _context.SaveChanges();
+            }
+
+            return RedirectToAction("Index");
+        }
+        
     }
 }

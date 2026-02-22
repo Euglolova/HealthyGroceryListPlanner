@@ -1,27 +1,36 @@
 @model List<HealthGroceryListPlanner.Web.Models.Product>
+@using HealthGroceryListPlanner.Web.Models
 
 <h2>Grocery List</h2>
 
+<a asp-action="Create" class="btn btn-success">Add Product</a>
+
+<br /><br />
+
+<p>Total products: @Model.Count</p>
+
 <table class="table">
     <thead>
-        <a asp-action="Create" class="btn btn-success">Add Product</a>
-<br /><br />
-        <p>Total products: @Model.Count</p>
         <tr>
             <th>Name</th>
             <th>Quantity</th>
             <th>Category</th>
             <th>Purchased</th>
+            <th>Actions</th>
         </tr>
     </thead>
+
     <tbody>
-        @foreach (var product in Model)
+        @foreach (HealthGroceryListPlanner.Web.Models.Product product in Model)
         {
             <tr>
                 <td>@product.Name</td>
                 <td>@product.Quantity</td>
-                <td>@product.Category</td>
-                <td>@product.IsPurchased</td>
+                <td>@product.Category?.Name</td>
+                <td>@(product.IsPurchased ? "Yes" : "No")</td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@product.Id" class="btn btn-info btn-sm">Details</a>
+                </td>
             </tr>
         }
     </tbody>

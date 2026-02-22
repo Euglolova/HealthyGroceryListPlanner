@@ -1,3 +1,5 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace HealthGroceryListPlanner.Web.Models
 {
     public class Product
@@ -8,7 +10,9 @@ namespace HealthGroceryListPlanner.Web.Models
 
         public int Quantity { get; set; }
 
-        public string Category { get; set; } = "";
+        [Display(Name = "Category")]
+        public int CategoryId { get; set; }
+        public Category? Category { get; set; }
 
         public bool IsPurchased { get; set; }
     }
