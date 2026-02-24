@@ -1,5 +1,6 @@
 @model HealthGroceryListPlanner.Web.Models.Product
 @using Microsoft.AspNetCore.Mvc.Rendering
+@using HealthGroceryListPlanner.Web.Models.Enums
 
 <h2>Edit Product</h2>
 
@@ -14,6 +15,16 @@
     <div class="form-group">
         <label asp-for="Quantity"></label>
         <input asp-for="Quantity" class="form-control" type="number" />
+    </div>
+    
+
+    <div class="form-group">
+        <label asp-for="Unit"></label>
+        <select asp-for="Unit"
+                asp-items="Html.GetEnumSelectList<UnitType>()"
+                class="form-control">
+        </select>
+        <span asp-validation-for="Unit" class="text-danger"></span>
     </div>
 
     <div class="form-group">

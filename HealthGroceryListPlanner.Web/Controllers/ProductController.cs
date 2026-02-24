@@ -11,7 +11,6 @@ namespace HealthGroceryListPlanner.Web.Controllers
     {
         private readonly GroceryContext _context;
 
-        // Constructor (Dependency Injection)
         public ProductController(GroceryContext context)
         {
             _context = context;
@@ -22,9 +21,10 @@ namespace HealthGroceryListPlanner.Web.Controllers
         // =========================
         public IActionResult Index()
         {
-           var products = _context.Products
+            var products = _context.Products
                 .Include(p => p.Category)
                 .ToList();
+
             return View(products);
         }
 
@@ -33,8 +33,8 @@ namespace HealthGroceryListPlanner.Web.Controllers
         // =========================
         public IActionResult Create()
         {
-                ViewBag.Categories = _context.Categories.ToList();
-                return View();
+            ViewBag.Categories = _context.Categories.ToList();
+            return View();
         }
 
         // =========================
@@ -50,37 +50,35 @@ namespace HealthGroceryListPlanner.Web.Controllers
                 _context.SaveChanges();
                 return RedirectToAction("Index");
             }
-            
+
             ViewBag.Categories = _context.Categories.ToList();
             return View(product);
         }
+
         // =========================
         // Product Details Screen
         // =========================
         public IActionResult Details(int id)
         {
             var product = _context.Products
-            .Include(p => p.Category)
-            .FirstOrDefault(p => p.Id == id);
+                .Include(p => p.Category)
+                .FirstOrDefault(p => p.Id == id);
 
             if (product == null)
-            {
                 return NotFound();
-            }
 
             return View(product);
-            // =========================
-            // Edit Product (GET)
-            // =========================
         }
+
+        // =========================
+        // Edit Product (GET)
+        // =========================
         public IActionResult Edit(int id)
         {
-        var product = _context.Products.Find(id);
+            var product = _context.Products.Find(id);
 
             if (product == null)
-            {   
                 return NotFound();
-            }
 
             ViewBag.Categories = _context.Categories.ToList();
             return View(product);
@@ -103,6 +101,25 @@ namespace HealthGroceryListPlanner.Web.Controllers
             ViewBag.Categories = _context.Categories.ToList();
             return View(product);
         }
+
+        // =========================
+        // Toggle Purchased (NEW)
+        // =========================
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult TogglePurchased(int id)
+        {
+            var product = _context.Products.Find(id);
+
+            if (product == null)
+                return NotFound();
+
+            product.IsPurchased = !product.IsPurchased;
+            _context.SaveChanges();
+
+            return RedirectToAction(nameof(Index));
+        }
+
         // =========================
         // Delete Product (GET)
         // =========================
@@ -111,9 +128,7 @@ namespace HealthGroceryListPlanner.Web.Controllers
             var product = _context.Products.Find(id);
 
             if (product == null)
-            {
                 return NotFound();
-            }
 
             return View(product);
         }
@@ -135,6 +150,5 @@ namespace HealthGroceryListPlanner.Web.Controllers
 
             return RedirectToAction("Index");
         }
-        
     }
 }

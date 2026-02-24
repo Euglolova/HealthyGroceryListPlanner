@@ -1,4 +1,5 @@
 @model HealthGroceryListPlanner.Web.Models.Product
+@using HealthGroceryListPlanner.Web.Models.Enums
 
 <h2>Product Details</h2>
 
@@ -6,7 +7,21 @@
 
 <div>
     <p><strong>Product Name:</strong> @Model.Name</p>
-    <p><strong>Quantity:</strong> @Model.Quantity</p>
+    <p>
+        <strong>Quantity:</strong>
+        @Model.Quantity.ToString("0.##")
+        @(
+            Model.Unit switch
+            {
+                UnitType.Kilogram => "kg",
+                UnitType.Piece => "pcs",
+                UnitType.Gram => "g",
+                UnitType.Liter => "L",
+                UnitType.Milliliter => "ml",
+                _ => ""
+            }
+        )
+    </p>
     <p><strong>Purchased:</strong> @(Model.IsPurchased ? "Yes" : "No")</p>
 </div>
 
