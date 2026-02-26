@@ -1,9 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using HealthGroceryListPlanner.Web.Data;
 using HealthGroceryListPlanner.Web.Models;
-using System.Linq;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace HealthGroceryListPlanner.Web.Controllers
 {
@@ -48,7 +46,7 @@ namespace HealthGroceryListPlanner.Web.Controllers
             {
                 _context.Products.Add(product);
                 _context.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction(nameof(Index));
             }
 
             ViewBag.Categories = _context.Categories.ToList();
@@ -95,7 +93,7 @@ namespace HealthGroceryListPlanner.Web.Controllers
             {
                 _context.Products.Update(product);
                 _context.SaveChanges();
-                return RedirectToAction("Index");
+                return RedirectToAction(nameof(Index));
             }
 
             ViewBag.Categories = _context.Categories.ToList();
@@ -103,7 +101,7 @@ namespace HealthGroceryListPlanner.Web.Controllers
         }
 
         // =========================
-        // Toggle Purchased (NEW)
+        // Toggle Purchased
         // =========================
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -148,7 +146,7 @@ namespace HealthGroceryListPlanner.Web.Controllers
                 _context.SaveChanges();
             }
 
-            return RedirectToAction("Index");
+            return RedirectToAction(nameof(Index));
         }
     }
 }

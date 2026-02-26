@@ -1,0 +1,41 @@
+@model List<HealthGroceryListPlanner.Web.Models.ShoppingList>
+
+<h2>My Shopping Lists</h2>
+
+<a asp-action="Create" class="btn btn-success mb-3">
+    + Create New List
+</a>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Created</th>
+            <th>Total Products</th>
+            <th></th>
+        </tr>
+    </thead>
+
+    <tbody>
+@foreach (var list in Model)
+{
+        <tr>
+            <td>@list.Title</td>
+            <td>
+                @list.CreatedAt.ToString(
+                    "MMMM dd, yyyy",
+                new System.Globalization.CultureInfo("en-US"))
+            </td>
+            <td>@list.Products.Count</td>
+            <td>
+                <a asp-controller="Product"
+                   asp-action="Index"
+                   asp-route-shoppingListId="@list.Id"
+                   class="btn btn-primary btn-sm">
+                    Open
+                </a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
