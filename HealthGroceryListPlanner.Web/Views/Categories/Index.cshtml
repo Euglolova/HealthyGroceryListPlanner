@@ -1,0 +1,19 @@
+@model List<Category>
+
+<div class="container">
+    <div class="row">
+        @foreach (var category in Model)
+        {
+            <div class="col-md-3 mb-4">
+                <div class="card">
+                    <a asp-action="Details" asp-route-id="@category.Id">
+                        <img src="@category.ImageUrl" class="card-img-top" />
+                        <div class="card-body text-center">
+                            <h5>@category.Name</h5>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        }
+    </div>
+</div>

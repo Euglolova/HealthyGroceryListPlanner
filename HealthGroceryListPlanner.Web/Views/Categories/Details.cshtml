@@ -1,0 +1,22 @@
+@model Category
+
+<h2>@Model.Name</h2>
+
+<div class="row">
+@foreach (var product in Model.Products)
+{
+    <div class="col-md-4 mb-3">
+        <div class="card p-3">
+            <h5>@product.Name</h5>
+            <p>@product.Quantity</p>
+        </div>
+    </div>
+}
+</div>
+
+<a asp-controller="Products"
+   asp-action="Create"
+   asp-route-categoryId="@Model.Id"
+   class="btn btn-success mt-4">
+   + Add Product
+</a>
