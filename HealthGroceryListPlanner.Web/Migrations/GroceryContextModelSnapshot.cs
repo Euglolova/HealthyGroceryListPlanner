@@ -39,49 +39,49 @@ namespace HealthGroceryListPlanner.Web.Migrations
                         new
                         {
                             Id = 1,
-                            ImageUrl = "/images/categories/vegetables.jpg",
+                            ImageUrl = "/images/vegetables.jpg",
                             Name = "Vegetables"
                         },
                         new
                         {
                             Id = 2,
-                            ImageUrl = "/images/categories/fruits.jpg",
+                            ImageUrl = "/images/fruits.jpg",
                             Name = "Fruits"
                         },
                         new
                         {
                             Id = 3,
-                            ImageUrl = "/images/categories/protein.jpg",
+                            ImageUrl = "/images/protein.jpg",
                             Name = "Protein"
                         },
                         new
                         {
                             Id = 4,
-                            ImageUrl = "/images/categories/dairy.jpg",
+                            ImageUrl = "/images/dairy.jpg",
                             Name = "Dairy"
                         },
                         new
                         {
                             Id = 5,
-                            ImageUrl = "/images/categories/grains.jpg",
+                            ImageUrl = "/images/grains.jpg",
                             Name = "Whole Grains"
                         },
                         new
                         {
                             Id = 6,
-                            ImageUrl = "/images/categories/nuts.jpg",
+                            ImageUrl = "/images/nuts.jpg",
                             Name = "Nuts & Seeds"
                         },
                         new
                         {
                             Id = 7,
-                            ImageUrl = "/images/categories/fats.jpg",
+                            ImageUrl = "/images/fats.jpg",
                             Name = "Healthy Fats"
                         },
                         new
                         {
                             Id = 8,
-                            ImageUrl = "/images/categories/beverages.jpg",
+                            ImageUrl = "/images/beverages.jpg",
                             Name = "Beverages"
                         });
                 });

@@ -19,14 +19,14 @@ namespace HealthGroceryListPlanner.Web.Data
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.Entity<Category>().HasData(
-                new Category { Id = 1, Name = "Vegetables", ImageUrl = "/images/categories/vegetables.jpg" },
-                new Category { Id = 2, Name = "Fruits", ImageUrl = "/images/categories/fruits.jpg" },
-                new Category { Id = 3, Name = "Protein", ImageUrl = "/images/categories/protein.jpg" },
-                new Category { Id = 4, Name = "Dairy", ImageUrl = "/images/categories/dairy.jpg" },
-                new Category { Id = 5, Name = "Whole Grains", ImageUrl = "/images/categories/grains.jpg" },
-                new Category { Id = 6, Name = "Nuts & Seeds", ImageUrl = "/images/categories/nuts.jpg" },
-                new Category { Id = 7, Name = "Healthy Fats", ImageUrl = "/images/categories/fats.jpg" },
-                new Category { Id = 8, Name = "Beverages", ImageUrl = "/images/categories/beverages.jpg" }
+                new Category { Id = 1, Name = "Vegetables", ImageUrl = "/images/vegetables.jpg" },
+                new Category { Id = 2, Name = "Fruits", ImageUrl = "/images/fruits.jpg" },
+                new Category { Id = 3, Name = "Protein", ImageUrl = "/images/protein.jpg" },
+                new Category { Id = 4, Name = "Dairy", ImageUrl = "/images/dairy.jpg" },
+                new Category { Id = 5, Name = "Whole Grains", ImageUrl = "/images/grains.jpg" },
+                new Category { Id = 6, Name = "Nuts & Seeds", ImageUrl = "/images/nuts.jpg" },
+                new Category { Id = 7, Name = "Healthy Fats", ImageUrl = "/images/fats.jpg" },
+                new Category { Id = 8, Name = "Beverages", ImageUrl = "/images/beverages.jpg" }
             );
         }
     }

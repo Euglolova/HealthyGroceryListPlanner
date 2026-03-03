@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HealthGroceryListPlanner.Web.Migrations
 {
     [DbContext(typeof(GroceryContext))]
-    [Migration("20260226003516_AddShoppingList")]
-    partial class AddShoppingList
+    [Migration("20260303021356_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -26,6 +26,10 @@ namespace HealthGroceryListPlanner.Web.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("ImageUrl")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("TEXT");
@@ -38,41 +42,49 @@ namespace HealthGroceryListPlanner.Web.Migrations
                         new
                         {
                             Id = 1,
+                            ImageUrl = "/images/vegetables.jpg",
                             Name = "Vegetables"
                         },
                         new
                         {
                             Id = 2,
+                            ImageUrl = "/images/fruits.jpg",
                             Name = "Fruits"
                         },
                         new
                         {
                             Id = 3,
+                            ImageUrl = "/images/protein.jpg",
                             Name = "Protein"
                         },
                         new
                         {
                             Id = 4,
+                            ImageUrl = "/images/dairy.jpg",
                             Name = "Dairy"
                         },
                         new
                         {
                             Id = 5,
+                            ImageUrl = "/images/grains.jpg",
                             Name = "Whole Grains"
                         },
                         new
                         {
                             Id = 6,
+                            ImageUrl = "/images/nuts.jpg",
                             Name = "Nuts & Seeds"
                         },
                         new
                         {
                             Id = 7,
+                            ImageUrl = "/images/fats.jpg",
                             Name = "Healthy Fats"
                         },
                         new
                         {
                             Id = 8,
+                            ImageUrl = "/images/beverages.jpg",
                             Name = "Beverages"
                         });
                 });
