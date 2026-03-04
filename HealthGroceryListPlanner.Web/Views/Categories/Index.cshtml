@@ -1,24 +1,31 @@
-@model List<Category>
+@model IEnumerable<HealthGroceryListPlanner.Web.Models.Category>
 
-<div class="container">
+<div class="container mt-4">
     <div class="row">
+
         @foreach (var category in Model)
         {
-            <div class="col-md-3 mb-4">
-                <div class="card">
-                    <a asp-action="Details" 
-                    asp-route-id="@category.Id"
-                     class="text-decoration-none text-dark">
-                        
-                        <img src="@category.ImageUrl" class="card-img-top" />
+            <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+                <div class="card shadow-sm h-100 category-card">
+
+                    <a asp-action="Details"
+                       asp-route-id="@category.Id"
+                       class="text-decoration-none text-dark">
+
+                        <img src="@(string.IsNullOrEmpty(category.ImageUrl) 
+                                    ? "/images/default-category.png" 
+                                    : category.ImageUrl)"
+                             class="card-img-top"
+                             style="height:200px; object-fit:cover;" />
 
                         <div class="card-body text-center">
-                            <h5>@category.Name</h5>
-
+                            <h5 class="fw-bold">@category.Name</h5>
                         </div>
+
                     </a>
                 </div>
             </div>
         }
+
     </div>
 </div>

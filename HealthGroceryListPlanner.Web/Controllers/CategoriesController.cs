@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using HealthGroceryListPlanner.Web.Data;
 using HealthGroceryListPlanner.Web.Models;
-using System.Linq;
 
 namespace HealthGroceryListPlanner.Web.Controllers
 {
@@ -16,23 +15,29 @@ namespace HealthGroceryListPlanner.Web.Controllers
         }
 
         // GET: /Categories
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var categories = _context.Categories.ToList();
+            var categories = await _context.Categories
+                .OrderBy(c => c.Name)
+                .ToListAsync();
+
             return View(categories);
         }
 
         // GET: /Categories/Details/5
-        public IActionResult Details(int id)
+        public async Task<IActionResult> Details(int id)
         {
-            var category = _context.Categories
+            var category = await _context.Categories
                 .Include(c => c.Products)
-                .FirstOrDefault(c => c.Id == id);
+                .FirstOrDefaultAsync(c => c.Id == id);
 
             if (category == null)
-            {
                 return NotFound();
-            }
+
+            // сортировка после загрузки
+            category.Products = category.Products
+                .OrderBy(p => p.Name)
+                .ToList();
 
             return View(category);
         }

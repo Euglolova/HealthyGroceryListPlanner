@@ -5,11 +5,11 @@ using HealthGroceryListPlanner.Web.Models;
 
 namespace HealthGroceryListPlanner.Web.Controllers
 {
-    public class ProductController : Controller
+    public class ProductsController : Controller
     {
         private readonly GroceryContext _context;
 
-        public ProductController(GroceryContext context)
+        public ProductsController(GroceryContext context)
         {
             _context = context;
         }
@@ -21,22 +21,27 @@ namespace HealthGroceryListPlanner.Web.Controllers
         {
             var products = _context.Products
                 .Include(p => p.Category)
+                .OrderBy(p => p.Name)
                 .ToList();
 
             return View(products);
         }
 
         // =========================
-        // Add Product Screen (GET)
+        // Add Product (GET)
         // =========================
-        public IActionResult Create()
+        public IActionResult Create(int categoryId)
         {
-            ViewBag.Categories = _context.Categories.ToList();
-            return View();
+            var product = new Product
+            {
+                CategoryId = categoryId
+            };
+
+            return View(product);
         }
 
         // =========================
-        // Add Product Screen (POST)
+        // Add Product (POST)
         // =========================
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -46,15 +51,20 @@ namespace HealthGroceryListPlanner.Web.Controllers
             {
                 _context.Products.Add(product);
                 _context.SaveChanges();
-                return RedirectToAction(nameof(Index));
+
+                // возвращаемся обратно в категорию
+                return RedirectToAction(
+                    "Details",
+                    "Categories",
+                    new { id = product.CategoryId }
+                );
             }
 
-            ViewBag.Categories = _context.Categories.ToList();
             return View(product);
         }
 
         // =========================
-        // Product Details Screen
+        // Product Details
         // =========================
         public IActionResult Details(int id)
         {
@@ -69,7 +79,7 @@ namespace HealthGroceryListPlanner.Web.Controllers
         }
 
         // =========================
-        // Edit Product (GET)
+        // Edit (GET)
         // =========================
         public IActionResult Edit(int id)
         {
@@ -78,12 +88,11 @@ namespace HealthGroceryListPlanner.Web.Controllers
             if (product == null)
                 return NotFound();
 
-            ViewBag.Categories = _context.Categories.ToList();
             return View(product);
         }
 
         // =========================
-        // Edit Product (POST)
+        // Edit (POST)
         // =========================
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -93,10 +102,14 @@ namespace HealthGroceryListPlanner.Web.Controllers
             {
                 _context.Products.Update(product);
                 _context.SaveChanges();
-                return RedirectToAction(nameof(Index));
+
+                return RedirectToAction(
+                    "Details",
+                    "Categories",
+                    new { id = product.CategoryId }
+                );
             }
 
-            ViewBag.Categories = _context.Categories.ToList();
             return View(product);
         }
 
@@ -115,15 +128,21 @@ namespace HealthGroceryListPlanner.Web.Controllers
             product.IsPurchased = !product.IsPurchased;
             _context.SaveChanges();
 
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(
+                "Details",
+                "Categories",
+                new { id = product.CategoryId }
+            );
         }
 
         // =========================
-        // Delete Product (GET)
+        // Delete (GET)
         // =========================
         public IActionResult Delete(int id)
         {
-            var product = _context.Products.Find(id);
+            var product = _context.Products
+                .Include(p => p.Category)
+                .FirstOrDefault(p => p.Id == id);
 
             if (product == null)
                 return NotFound();
@@ -132,7 +151,7 @@ namespace HealthGroceryListPlanner.Web.Controllers
         }
 
         // =========================
-        // Delete Product (POST)
+        // Delete (POST)
         // =========================
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
@@ -142,11 +161,19 @@ namespace HealthGroceryListPlanner.Web.Controllers
 
             if (product != null)
             {
+                var categoryId = product.CategoryId;
+
                 _context.Products.Remove(product);
                 _context.SaveChanges();
+
+                return RedirectToAction(
+                    "Details",
+                    "Categories",
+                    new { id = categoryId }
+                );
             }
 
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction("Index");
         }
     }
 }

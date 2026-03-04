@@ -5,7 +5,7 @@ namespace HealthGroceryListPlanner.Web.Models.Enums
     public enum UnitType
     {
         [Display(Name = "pcs")]
-        Piece = 0,
+        Pieces = 0,
 
         [Display(Name = "kg")]
         Kilogram = 1,
