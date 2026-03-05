@@ -88,3 +88,14 @@ body {
     background-color: #218838;
     transform: scale(1.1);
 }
+
+/* Скрываем кнопки */
+.category-actions {
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+/* Показываем при наведении */
+.category-card:hover .category-actions {
+    opacity: 1;
+}

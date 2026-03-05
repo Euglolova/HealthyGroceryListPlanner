@@ -3,6 +3,7 @@ using System;
 using HealthGroceryListPlanner.Web.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HealthGroceryListPlanner.Web.Migrations
 {
     [DbContext(typeof(GroceryContext))]
-    partial class GroceryContextModelSnapshot : ModelSnapshot
+    [Migration("20260304222249_InitialCreate")]
+    partial class InitialCreate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.24");
@@ -22,10 +25,6 @@ namespace HealthGroceryListPlanner.Web.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
-
-                    b.Property<string>("Emoji")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
 
                     b.Property<string>("ImageUrl")
                         .IsRequired()
@@ -43,56 +42,48 @@ namespace HealthGroceryListPlanner.Web.Migrations
                         new
                         {
                             Id = 1,
-                            Emoji = "",
                             ImageUrl = "/images/vegetables.jpg",
                             Name = "Vegetables"
                         },
                         new
                         {
                             Id = 2,
-                            Emoji = "",
                             ImageUrl = "/images/fruits.jpg",
                             Name = "Fruits and Berries"
                         },
                         new
                         {
                             Id = 3,
-                            Emoji = "",
                             ImageUrl = "/images/protein.jpg",
                             Name = "Protein"
                         },
                         new
                         {
                             Id = 4,
-                            Emoji = "",
                             ImageUrl = "/images/dairy.jpg",
                             Name = "Dairy"
                         },
                         new
                         {
                             Id = 5,
-                            Emoji = "",
                             ImageUrl = "/images/grains.jpg",
                             Name = "Whole Grains"
                         },
                         new
                         {
                             Id = 6,
-                            Emoji = "",
                             ImageUrl = "/images/nuts.jpg",
                             Name = "Nuts & Seeds"
                         },
                         new
                         {
                             Id = 7,
-                            Emoji = "",
                             ImageUrl = "/images/fats.jpg",
                             Name = "Healthy Fats"
                         },
                         new
                         {
                             Id = 8,
-                            Emoji = "",
                             ImageUrl = "/images/beverages.jpg",
                             Name = "Beverages"
                         });
@@ -119,13 +110,13 @@ namespace HealthGroceryListPlanner.Web.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("TEXT");
 
-                    b.Property<decimal?>("Quantity")
+                    b.Property<decimal>("Quantity")
                         .HasColumnType("TEXT");
 
                     b.Property<int?>("ShoppingListId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int?>("Unit")
+                    b.Property<int>("Unit")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("Id");

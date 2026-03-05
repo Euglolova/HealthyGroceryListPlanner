@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HealthGroceryListPlanner.Web.Migrations
 {
     [DbContext(typeof(GroceryContext))]
-    [Migration("20260304001603_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20260305172303_AddEmojiToCategory")]
+    partial class AddEmojiToCategory
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,6 +25,10 @@ namespace HealthGroceryListPlanner.Web.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
+
+                    b.Property<string>("Emoji")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("ImageUrl")
                         .IsRequired()
@@ -42,48 +46,56 @@ namespace HealthGroceryListPlanner.Web.Migrations
                         new
                         {
                             Id = 1,
+                            Emoji = "",
                             ImageUrl = "/images/vegetables.jpg",
                             Name = "Vegetables"
                         },
                         new
                         {
                             Id = 2,
+                            Emoji = "",
                             ImageUrl = "/images/fruits.jpg",
-                            Name = "Fruits"
+                            Name = "Fruits and Berries"
                         },
                         new
                         {
                             Id = 3,
+                            Emoji = "",
                             ImageUrl = "/images/protein.jpg",
                             Name = "Protein"
                         },
                         new
                         {
                             Id = 4,
+                            Emoji = "",
                             ImageUrl = "/images/dairy.jpg",
                             Name = "Dairy"
                         },
                         new
                         {
                             Id = 5,
+                            Emoji = "",
                             ImageUrl = "/images/grains.jpg",
                             Name = "Whole Grains"
                         },
                         new
                         {
                             Id = 6,
+                            Emoji = "",
                             ImageUrl = "/images/nuts.jpg",
                             Name = "Nuts & Seeds"
                         },
                         new
                         {
                             Id = 7,
+                            Emoji = "",
                             ImageUrl = "/images/fats.jpg",
                             Name = "Healthy Fats"
                         },
                         new
                         {
                             Id = 8,
+                            Emoji = "",
                             ImageUrl = "/images/beverages.jpg",
                             Name = "Beverages"
                         });
@@ -192,66 +204,6 @@ namespace HealthGroceryListPlanner.Web.Migrations
                         {
                             Id = 207,
                             CategoryId = 1,
-                            Emoji = "🫑",
-                            IsPurchased = false,
-                            Name = "Bell Pepper",
-                            Quantity = 1m,
-                            Unit = 0
-                        },
-                        new
-                        {
-                            Id = 208,
-                            CategoryId = 1,
-                            Emoji = "🥦",
-                            IsPurchased = false,
-                            Name = "Broccoli",
-                            Quantity = 1m,
-                            Unit = 0
-                        },
-                        new
-                        {
-                            Id = 209,
-                            CategoryId = 1,
-                            Emoji = "🥬",
-                            IsPurchased = false,
-                            Name = "Cauliflower",
-                            Quantity = 1m,
-                            Unit = 0
-                        },
-                        new
-                        {
-                            Id = 210,
-                            CategoryId = 1,
-                            Emoji = "🥬",
-                            IsPurchased = false,
-                            Name = "Spinach",
-                            Quantity = 1m,
-                            Unit = 0
-                        },
-                        new
-                        {
-                            Id = 211,
-                            CategoryId = 1,
-                            Emoji = "🥬",
-                            IsPurchased = false,
-                            Name = "Lettuce",
-                            Quantity = 1m,
-                            Unit = 0
-                        },
-                        new
-                        {
-                            Id = 212,
-                            CategoryId = 1,
-                            Emoji = "🥒",
-                            IsPurchased = false,
-                            Name = "Zucchini",
-                            Quantity = 1m,
-                            Unit = 0
-                        },
-                        new
-                        {
-                            Id = 213,
-                            CategoryId = 1,
                             Emoji = "🍆",
                             IsPurchased = false,
                             Name = "Eggplant",
@@ -260,57 +212,7 @@ namespace HealthGroceryListPlanner.Web.Migrations
                         },
                         new
                         {
-                            Id = 214,
-                            CategoryId = 1,
-                            Emoji = "🥬",
-                            IsPurchased = false,
-                            Name = "Cabbage",
-                            Quantity = 1m,
-                            Unit = 0
-                        },
-                        new
-                        {
-                            Id = 215,
-                            CategoryId = 1,
-                            Emoji = "🥬",
-                            IsPurchased = false,
-                            Name = "Red Cabbage",
-                            Quantity = 1m,
-                            Unit = 0
-                        },
-                        new
-                        {
-                            Id = 216,
-                            CategoryId = 1,
-                            Emoji = "🥬",
-                            IsPurchased = false,
-                            Name = "Brussels Sprouts",
-                            Quantity = 1m,
-                            Unit = 0
-                        },
-                        new
-                        {
-                            Id = 217,
-                            CategoryId = 1,
-                            Emoji = "🫛",
-                            IsPurchased = false,
-                            Name = "Green Beans",
-                            Quantity = 1m,
-                            Unit = 0
-                        },
-                        new
-                        {
-                            Id = 218,
-                            CategoryId = 1,
-                            Emoji = "🫛",
-                            IsPurchased = false,
-                            Name = "Peas",
-                            Quantity = 1m,
-                            Unit = 0
-                        },
-                        new
-                        {
-                            Id = 219,
+                            Id = 208,
                             CategoryId = 1,
                             Emoji = "🌽",
                             IsPurchased = false,
@@ -320,161 +222,351 @@ namespace HealthGroceryListPlanner.Web.Migrations
                         },
                         new
                         {
-                            Id = 220,
-                            CategoryId = 1,
-                            Emoji = "🥬",
+                            Id = 301,
+                            CategoryId = 2,
+                            Emoji = "🍎",
                             IsPurchased = false,
-                            Name = "Asparagus",
+                            Name = "Apple",
                             Quantity = 1m,
                             Unit = 0
                         },
                         new
                         {
-                            Id = 221,
-                            CategoryId = 1,
-                            Emoji = "🥬",
+                            Id = 302,
+                            CategoryId = 2,
+                            Emoji = "🍌",
                             IsPurchased = false,
-                            Name = "Celery",
+                            Name = "Banana",
                             Quantity = 1m,
                             Unit = 0
                         },
                         new
                         {
-                            Id = 222,
-                            CategoryId = 1,
-                            Emoji = "🍄",
+                            Id = 303,
+                            CategoryId = 2,
+                            Emoji = "🍊",
                             IsPurchased = false,
-                            Name = "Mushrooms",
+                            Name = "Orange",
                             Quantity = 1m,
                             Unit = 0
                         },
                         new
                         {
-                            Id = 223,
-                            CategoryId = 1,
-                            Emoji = "🍠",
+                            Id = 304,
+                            CategoryId = 2,
+                            Emoji = "🍓",
                             IsPurchased = false,
-                            Name = "Sweet Potato",
+                            Name = "Strawberry",
                             Quantity = 1m,
                             Unit = 0
                         },
                         new
                         {
-                            Id = 224,
-                            CategoryId = 1,
-                            Emoji = "🥕",
+                            Id = 305,
+                            CategoryId = 2,
+                            Emoji = "🍇",
                             IsPurchased = false,
-                            Name = "Radish",
+                            Name = "Grapes",
                             Quantity = 1m,
                             Unit = 0
                         },
                         new
                         {
-                            Id = 225,
-                            CategoryId = 1,
-                            Emoji = "🥕",
+                            Id = 401,
+                            CategoryId = 3,
+                            Emoji = "🍗",
                             IsPurchased = false,
-                            Name = "Beetroot",
+                            Name = "Chicken Breast",
                             Quantity = 1m,
                             Unit = 0
                         },
                         new
                         {
-                            Id = 226,
-                            CategoryId = 1,
-                            Emoji = "🥬",
+                            Id = 402,
+                            CategoryId = 3,
+                            Emoji = "🐟",
                             IsPurchased = false,
-                            Name = "Kale",
+                            Name = "Salmon",
                             Quantity = 1m,
                             Unit = 0
                         },
                         new
                         {
-                            Id = 227,
-                            CategoryId = 1,
-                            Emoji = "🥬",
+                            Id = 403,
+                            CategoryId = 3,
+                            Emoji = "🥚",
                             IsPurchased = false,
-                            Name = "Arugula",
+                            Name = "Eggs",
                             Quantity = 1m,
                             Unit = 0
                         },
                         new
                         {
-                            Id = 228,
-                            CategoryId = 1,
-                            Emoji = "🧅",
+                            Id = 404,
+                            CategoryId = 3,
+                            Emoji = "🧊",
                             IsPurchased = false,
-                            Name = "Leek",
+                            Name = "Tofu",
                             Quantity = 1m,
                             Unit = 0
                         },
                         new
                         {
-                            Id = 229,
-                            CategoryId = 1,
-                            Emoji = "🎃",
+                            Id = 405,
+                            CategoryId = 3,
+                            Emoji = "🫘",
                             IsPurchased = false,
-                            Name = "Pumpkin",
+                            Name = "Beans",
                             Quantity = 1m,
                             Unit = 0
                         },
                         new
                         {
-                            Id = 230,
-                            CategoryId = 1,
-                            Emoji = "🎃",
+                            Id = 501,
+                            CategoryId = 4,
+                            Emoji = "🥛",
                             IsPurchased = false,
-                            Name = "Butternut Squash",
+                            Name = "Milk",
                             Quantity = 1m,
                             Unit = 0
                         },
                         new
                         {
-                            Id = 231,
-                            CategoryId = 1,
-                            Emoji = "🥕",
+                            Id = 502,
+                            CategoryId = 4,
+                            Emoji = "🧀",
                             IsPurchased = false,
-                            Name = "Turnip",
+                            Name = "Cheese",
                             Quantity = 1m,
                             Unit = 0
                         },
                         new
                         {
-                            Id = 232,
-                            CategoryId = 1,
-                            Emoji = "🥕",
+                            Id = 503,
+                            CategoryId = 4,
+                            Emoji = "🥣",
                             IsPurchased = false,
-                            Name = "Parsnip",
+                            Name = "Yogurt",
                             Quantity = 1m,
                             Unit = 0
                         },
                         new
                         {
-                            Id = 233,
-                            CategoryId = 1,
-                            Emoji = "🥬",
+                            Id = 504,
+                            CategoryId = 4,
+                            Emoji = "🧈",
                             IsPurchased = false,
-                            Name = "Okra",
+                            Name = "Butter",
                             Quantity = 1m,
                             Unit = 0
                         },
                         new
                         {
-                            Id = 234,
-                            CategoryId = 1,
-                            Emoji = "🌶️",
+                            Id = 505,
+                            CategoryId = 4,
+                            Emoji = "🥛",
                             IsPurchased = false,
-                            Name = "Jalapeño",
+                            Name = "Cottage Cheese",
                             Quantity = 1m,
                             Unit = 0
                         },
                         new
                         {
-                            Id = 235,
-                            CategoryId = 1,
+                            Id = 601,
+                            CategoryId = 5,
+                            Emoji = "🍚",
+                            IsPurchased = false,
+                            Name = "Brown Rice",
+                            Quantity = 1m,
+                            Unit = 0
+                        },
+                        new
+                        {
+                            Id = 602,
+                            CategoryId = 5,
+                            Emoji = "🥣",
+                            IsPurchased = false,
+                            Name = "Oats",
+                            Quantity = 1m,
+                            Unit = 0
+                        },
+                        new
+                        {
+                            Id = 603,
+                            CategoryId = 5,
+                            Emoji = "🍚",
+                            IsPurchased = false,
+                            Name = "Quinoa",
+                            Quantity = 1m,
+                            Unit = 0
+                        },
+                        new
+                        {
+                            Id = 604,
+                            CategoryId = 5,
+                            Emoji = "🍞",
+                            IsPurchased = false,
+                            Name = "Whole Wheat Bread",
+                            Quantity = 1m,
+                            Unit = 0
+                        },
+                        new
+                        {
+                            Id = 605,
+                            CategoryId = 5,
+                            Emoji = "🌾",
+                            IsPurchased = false,
+                            Name = "Barley",
+                            Quantity = 1m,
+                            Unit = 0
+                        },
+                        new
+                        {
+                            Id = 701,
+                            CategoryId = 6,
+                            Emoji = "🌰",
+                            IsPurchased = false,
+                            Name = "Almonds",
+                            Quantity = 1m,
+                            Unit = 0
+                        },
+                        new
+                        {
+                            Id = 702,
+                            CategoryId = 6,
+                            Emoji = "🌰",
+                            IsPurchased = false,
+                            Name = "Walnuts",
+                            Quantity = 1m,
+                            Unit = 0
+                        },
+                        new
+                        {
+                            Id = 703,
+                            CategoryId = 6,
+                            Emoji = "🥜",
+                            IsPurchased = false,
+                            Name = "Cashews",
+                            Quantity = 1m,
+                            Unit = 0
+                        },
+                        new
+                        {
+                            Id = 704,
+                            CategoryId = 6,
+                            Emoji = "🌱",
+                            IsPurchased = false,
+                            Name = "Chia Seeds",
+                            Quantity = 1m,
+                            Unit = 0
+                        },
+                        new
+                        {
+                            Id = 705,
+                            CategoryId = 6,
+                            Emoji = "🌱",
+                            IsPurchased = false,
+                            Name = "Flax Seeds",
+                            Quantity = 1m,
+                            Unit = 0
+                        },
+                        new
+                        {
+                            Id = 801,
+                            CategoryId = 7,
                             Emoji = "🥑",
                             IsPurchased = false,
                             Name = "Avocado",
+                            Quantity = 1m,
+                            Unit = 0
+                        },
+                        new
+                        {
+                            Id = 802,
+                            CategoryId = 7,
+                            Emoji = "🫒",
+                            IsPurchased = false,
+                            Name = "Olive Oil",
+                            Quantity = 1m,
+                            Unit = 0
+                        },
+                        new
+                        {
+                            Id = 803,
+                            CategoryId = 7,
+                            Emoji = "🥥",
+                            IsPurchased = false,
+                            Name = "Coconut Oil",
+                            Quantity = 1m,
+                            Unit = 0
+                        },
+                        new
+                        {
+                            Id = 804,
+                            CategoryId = 7,
+                            Emoji = "🍫",
+                            IsPurchased = false,
+                            Name = "Dark Chocolate",
+                            Quantity = 1m,
+                            Unit = 0
+                        },
+                        new
+                        {
+                            Id = 805,
+                            CategoryId = 7,
+                            Emoji = "🥜",
+                            IsPurchased = false,
+                            Name = "Peanut Butter",
+                            Quantity = 1m,
+                            Unit = 0
+                        },
+                        new
+                        {
+                            Id = 901,
+                            CategoryId = 8,
+                            Emoji = "☕",
+                            IsPurchased = false,
+                            Name = "Coffee",
+                            Quantity = 1m,
+                            Unit = 0
+                        },
+                        new
+                        {
+                            Id = 902,
+                            CategoryId = 8,
+                            Emoji = "🍵",
+                            IsPurchased = false,
+                            Name = "Green Tea",
+                            Quantity = 1m,
+                            Unit = 0
+                        },
+                        new
+                        {
+                            Id = 903,
+                            CategoryId = 8,
+                            Emoji = "🍵",
+                            IsPurchased = false,
+                            Name = "Black Tea",
+                            Quantity = 1m,
+                            Unit = 0
+                        },
+                        new
+                        {
+                            Id = 904,
+                            CategoryId = 8,
+                            Emoji = "🍊",
+                            IsPurchased = false,
+                            Name = "Orange Juice",
+                            Quantity = 1m,
+                            Unit = 0
+                        },
+                        new
+                        {
+                            Id = 905,
+                            CategoryId = 8,
+                            Emoji = "🥤",
+                            IsPurchased = false,
+                            Name = "Smoothie",
                             Quantity = 1m,
                             Unit = 0
                         });

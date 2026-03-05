@@ -27,12 +27,12 @@
             <td>@product.Name</td>
 
             <td>
-                @product.Quantity.ToString("0.##")
+                @(product.Quantity.HasValue ? product.Quantity.Value.ToString("0.##") : "")
                 @(
                     product.Unit switch
                     {
                         UnitType.Kilogram => "kg",
-                        UnitType.Piece => "pcs",
+                        UnitType.Pieces => "pcs",
                         UnitType.Gram => "g",
                         UnitType.Liter => "L",
                         UnitType.Milliliter => "ml",

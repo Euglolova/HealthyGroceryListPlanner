@@ -17,18 +17,18 @@ namespace HealthGroceryListPlanner.Web.Controllers
         // =========================
         // Grocery List Screen
         // =========================
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var products = _context.Products
+            var products = await _context.Products
                 .Include(p => p.Category)
                 .OrderBy(p => p.Name)
-                .ToList();
+                .ToListAsync();
 
             return View(products);
         }
 
         // =========================
-        // Add Product (GET)
+        // CREATE PRODUCT (GET)
         // =========================
         public IActionResult Create(int categoryId)
         {
@@ -41,92 +41,17 @@ namespace HealthGroceryListPlanner.Web.Controllers
         }
 
         // =========================
-        // Add Product (POST)
+        // CREATE PRODUCT (POST)
         // =========================
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(Product product)
+        public async Task<IActionResult> Create(Product product)
         {
-            if (ModelState.IsValid)
-            {
-                _context.Products.Add(product);
-                _context.SaveChanges();
+           if (!ModelState.IsValid)
+               return View(product);
 
-                // возвращаемся обратно в категорию
-                return RedirectToAction(
-                    "Details",
-                    "Categories",
-                    new { id = product.CategoryId }
-                );
-            }
-
-            return View(product);
-        }
-
-        // =========================
-        // Product Details
-        // =========================
-        public IActionResult Details(int id)
-        {
-            var product = _context.Products
-                .Include(p => p.Category)
-                .FirstOrDefault(p => p.Id == id);
-
-            if (product == null)
-                return NotFound();
-
-            return View(product);
-        }
-
-        // =========================
-        // Edit (GET)
-        // =========================
-        public IActionResult Edit(int id)
-        {
-            var product = _context.Products.Find(id);
-
-            if (product == null)
-                return NotFound();
-
-            return View(product);
-        }
-
-        // =========================
-        // Edit (POST)
-        // =========================
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult Edit(Product product)
-        {
-            if (ModelState.IsValid)
-            {
-                _context.Products.Update(product);
-                _context.SaveChanges();
-
-                return RedirectToAction(
-                    "Details",
-                    "Categories",
-                    new { id = product.CategoryId }
-                );
-            }
-
-            return View(product);
-        }
-
-        // =========================
-        // Toggle Purchased
-        // =========================
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult TogglePurchased(int id)
-        {
-            var product = _context.Products.Find(id);
-
-            if (product == null)
-                return NotFound();
-
-            product.IsPurchased = !product.IsPurchased;
-            _context.SaveChanges();
+            _context.Products.Add(product);
+            await _context.SaveChangesAsync();
 
             return RedirectToAction(
                 "Details",
@@ -136,13 +61,13 @@ namespace HealthGroceryListPlanner.Web.Controllers
         }
 
         // =========================
-        // Delete (GET)
+        // PRODUCT DETAILS
         // =========================
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Details(int id)
         {
-            var product = _context.Products
+            var product = await _context.Products
                 .Include(p => p.Category)
-                .FirstOrDefault(p => p.Id == id);
+                .FirstOrDefaultAsync(p => p.Id == id);
 
             if (product == null)
                 return NotFound();
@@ -151,29 +76,75 @@ namespace HealthGroceryListPlanner.Web.Controllers
         }
 
         // =========================
-        // Delete (POST)
+        // EDIT PRODUCT (GET)
+        // =========================
+        public async Task<IActionResult> Edit(int id)
+        {
+            var product = await _context.Products.FindAsync(id);
+
+            if (product == null)
+                return NotFound();
+
+            return View(product);
+        }
+
+        // =========================
+        // EDIT PRODUCT (POST)
+        // =========================
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(Product product)
+        {
+            if (!ModelState.IsValid)
+                return View(product);
+
+            _context.Products.Update(product);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(
+                "Details",
+                "Categories",
+                new { id = product.CategoryId }
+            );
+        }
+
+        // =========================
+        // DELETE PRODUCT (GET)
+        // =========================
+        public async Task<IActionResult> Delete(int id)
+        {
+            var product = await _context.Products
+                .Include(p => p.Category)
+                .FirstOrDefaultAsync(p => p.Id == id);
+
+            if (product == null)
+                return NotFound();
+
+            return View(product);
+        }
+
+        // =========================
+        // DELETE PRODUCT (POST)
         // =========================
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public IActionResult DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var product = _context.Products.Find(id);
+            var product = await _context.Products.FindAsync(id);
 
-            if (product != null)
-            {
-                var categoryId = product.CategoryId;
+            if (product == null)
+                return RedirectToAction("Index");
 
-                _context.Products.Remove(product);
-                _context.SaveChanges();
+            var categoryId = product.CategoryId;
 
-                return RedirectToAction(
-                    "Details",
-                    "Categories",
-                    new { id = categoryId }
-                );
-            }
+            _context.Products.Remove(product);
+            await _context.SaveChangesAsync();
 
-            return RedirectToAction("Index");
+            return RedirectToAction(
+                "Details",
+                "Categories",
+                new { id = categoryId }
+            );
         }
     }
 }
