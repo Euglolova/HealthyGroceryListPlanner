@@ -596,11 +596,13 @@ namespace HealthGroceryListPlanner.Web.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("HealthGroceryListPlanner.Web.Models.ShoppingList", null)
+                    b.HasOne("HealthGroceryListPlanner.Web.Models.ShoppingList", "ShoppingList")
                         .WithMany("Products")
                         .HasForeignKey("ShoppingListId");
 
                     b.Navigation("Category");
+
+                    b.Navigation("ShoppingList");
                 });
 
             modelBuilder.Entity("HealthGroceryListPlanner.Web.Models.Category", b =>

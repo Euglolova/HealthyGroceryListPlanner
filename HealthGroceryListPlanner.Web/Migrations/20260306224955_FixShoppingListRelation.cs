@@ -5,7 +5,7 @@
 namespace HealthGroceryListPlanner.Web.Migrations
 {
     /// <inheritdoc />
-    public partial class MakeQuantityNullable : Migration
+    public partial class FixShoppingListRelation : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

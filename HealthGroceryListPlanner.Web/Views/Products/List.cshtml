@@ -1,0 +1,33 @@
+@model List<HealthGroceryListPlanner.Web.Models.Product>
+
+<h2>Products</h2>
+
+<a asp-controller="Products"
+   asp-action="SelectForList"
+   asp-route-shoppingListId="@ViewBag.ShoppingListId"
+   class="btn btn-success">
+   + Add Product
+</a>
+
+<table class="table mt-3">
+
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Category</th>
+        </tr>
+    </thead>
+
+    <tbody>
+
+@foreach (var product in Model)
+{
+        <tr>
+            <td>@product.Name</td>
+            <td>@product.Category?.Name</td>
+        </tr>
+}
+
+    </tbody>
+
+</table>

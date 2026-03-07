@@ -17,12 +17,12 @@ namespace HealthGroceryListPlanner.Web.Controllers
         // =========================
         // Show All Shopping Lists
         // =========================
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var lists = _context.ShoppingLists
+            var lists = await _context.ShoppingLists
                 .Include(l => l.Products)
                 .OrderByDescending(l => l.CreatedAt)
-                .ToList();
+                .ToListAsync();
 
             return View(lists);
         }
@@ -40,16 +40,17 @@ namespace HealthGroceryListPlanner.Web.Controllers
         // =========================
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(ShoppingList list)
+        public async Task<IActionResult> Create(ShoppingList list)
         {
-            if (ModelState.IsValid)
-            {
-                _context.ShoppingLists.Add(list);
-                _context.SaveChanges();
-                return RedirectToAction(nameof(Index));
-            }
+            if (!ModelState.IsValid)
+                return View(list);
 
-            return View(list);
+            list.CreatedAt = DateTime.Now;
+
+            _context.ShoppingLists.Add(list);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Index));
         }
     }
 }

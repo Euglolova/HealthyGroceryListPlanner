@@ -25,5 +25,9 @@ namespace HealthGroceryListPlanner.Web.Models
         public bool IsPurchased { get; set; }
 
         public string Emoji { get; set; } = "";
+        public int? ShoppingListId { get; set; }
+
+        public ShoppingList? ShoppingList { get; set; } 
+
     }
 }

@@ -146,5 +146,51 @@ namespace HealthGroceryListPlanner.Web.Controllers
                 new { id = categoryId }
             );
         }
+        // =========================
+        // PRODUCTS BY SHOPPING LIST
+        // =========================
+        public async Task<IActionResult> List(int id)
+        {
+            var products = await _context.Products
+                .Include(p => p.Category)
+                .Where(p => p.ShoppingListId == id)
+                .OrderBy(p => p.Name)
+                .ToListAsync();
+
+            ViewBag.ShoppingListId = id;
+
+            return View(products);
+        }
+        
+        [HttpPost]
+        public async Task<IActionResult> AddToList(int productId, int shoppingListId)
+        {
+            var product = await _context.Products.FindAsync(productId);
+
+            if (product == null)
+                return NotFound();
+
+            product.ShoppingListId = shoppingListId;
+
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("List", new { id = shoppingListId });
+        }
+
+        // =========================
+        // SELECT PRODUCTS FOR SHOPPING LIST
+        // =========================
+        public async Task<IActionResult> SelectForList(int shoppingListId)
+        {
+            ViewBag.ShoppingListId = shoppingListId;
+
+            var categories = await _context.Categories
+                .Include(c => c.Products)
+                .OrderBy(c => c.Name)
+                .ToListAsync();
+
+            return View(categories);
+        }
+
     }
 }

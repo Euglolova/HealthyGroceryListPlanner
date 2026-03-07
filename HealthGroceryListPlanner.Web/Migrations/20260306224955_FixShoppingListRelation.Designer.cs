@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HealthGroceryListPlanner.Web.Migrations
 {
     [DbContext(typeof(GroceryContext))]
-    [Migration("20260305192551_MakeQuantityNullable")]
-    partial class MakeQuantityNullable
+    [Migration("20260306224955_FixShoppingListRelation")]
+    partial class FixShoppingListRelation
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -599,11 +599,13 @@ namespace HealthGroceryListPlanner.Web.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("HealthGroceryListPlanner.Web.Models.ShoppingList", null)
+                    b.HasOne("HealthGroceryListPlanner.Web.Models.ShoppingList", "ShoppingList")
                         .WithMany("Products")
                         .HasForeignKey("ShoppingListId");
 
                     b.Navigation("Category");
+
+                    b.Navigation("ShoppingList");
                 });
 
             modelBuilder.Entity("HealthGroceryListPlanner.Web.Models.Category", b =>
