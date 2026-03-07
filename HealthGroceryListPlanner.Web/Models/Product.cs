@@ -11,10 +11,11 @@ namespace HealthGroceryListPlanner.Web.Models
         [StringLength(100, ErrorMessage = "Name cannot be longer than 100 characters")]
         public string Name { get; set; } = "";
 
-        // Сделали НЕ обязательным
-        public decimal? Quantity { get; set; }
+        // Теперь целое число
+        [Range(1, 1000, ErrorMessage = "Quantity must be between 1 and 1000")]
+        public int? Quantity { get; set; }
 
-        // Сделали НЕ обязательным
+        // Не обязательное поле
         public UnitType? Unit { get; set; }
 
         [Display(Name = "Category")]
@@ -25,9 +26,9 @@ namespace HealthGroceryListPlanner.Web.Models
         public bool IsPurchased { get; set; }
 
         public string Emoji { get; set; } = "";
+
         public int? ShoppingListId { get; set; }
 
-        public ShoppingList? ShoppingList { get; set; } 
-
+        public ShoppingList? ShoppingList { get; set; }
     }
 }

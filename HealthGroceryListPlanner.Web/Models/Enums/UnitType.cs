@@ -5,18 +5,18 @@ namespace HealthGroceryListPlanner.Web.Models.Enums
     public enum UnitType
     {
         [Display(Name = "pcs")]
-        Pieces = 0,
+        Pieces,
 
         [Display(Name = "kg")]
-        Kilogram = 1,
+        Kilogram,
 
         [Display(Name = "g")]
-        Gram = 2,
+        Gram,
 
         [Display(Name = "L")]
-        Liter = 3,
+        Liter,
 
         [Display(Name = "ml")]
-        Milliliter = 4
+        Milliliter
     }
 }

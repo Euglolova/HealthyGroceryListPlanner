@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using HealthGroceryListPlanner.Web.Data;
 using HealthGroceryListPlanner.Web.Models;
+using HealthGroceryListPlanner.Web.Models.Enums;
 
 namespace HealthGroceryListPlanner.Web.Controllers
 {
@@ -15,7 +16,7 @@ namespace HealthGroceryListPlanner.Web.Controllers
         }
 
         // =========================
-        // Grocery List Screen
+        // ALL PRODUCTS
         // =========================
         public async Task<IActionResult> Index()
         {
@@ -28,27 +29,68 @@ namespace HealthGroceryListPlanner.Web.Controllers
         }
 
         // =========================
-        // CREATE PRODUCT (GET)
+        // PRODUCTS IN SHOPPING LIST
         // =========================
-        public IActionResult Create(int categoryId)
+        public async Task<IActionResult> List(int id)
         {
-            var product = new Product
-            {
-                CategoryId = categoryId
-            };
+            var products = await _context.Products
+                .Include(p => p.Category)
+                .Where(p => p.ShoppingListId == id)
+                .OrderBy(p => p.Name)
+                .ToListAsync();
 
-            return View(product);
+            ViewBag.ShoppingListId = id;
+
+            return View(products);
         }
 
         // =========================
-        // CREATE PRODUCT (POST)
+        // SELECT PRODUCTS FOR LIST
         // =========================
+        public async Task<IActionResult> SelectForList(int shoppingListId)
+        {
+            ViewBag.ShoppingListId = shoppingListId;
+
+            var categories = await _context.Categories
+                .Include(c => c.Products)
+                .OrderBy(c => c.Name)
+                .ToListAsync();
+
+            return View(categories);
+        }
+
+        // =========================
+        // ADD PRODUCT TO SHOPPING LIST
+        // =========================
+        [HttpPost]
+        public async Task<IActionResult> AddToList(int productId, int shoppingListId)
+        {
+            var product = await _context.Products.FindAsync(productId);
+
+            if (product == null)
+                return NotFound();
+
+            product.ShoppingListId = shoppingListId;
+
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("List", new { id = shoppingListId });
+        }
+
+        // =========================
+        // CREATE PRODUCT
+        // =========================
+        public IActionResult Create(int categoryId)
+        {
+            return View(new Product { CategoryId = categoryId });
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Product product)
         {
-           if (!ModelState.IsValid)
-               return View(product);
+            if (!ModelState.IsValid)
+                return View(product);
 
             _context.Products.Add(product);
             await _context.SaveChangesAsync();
@@ -56,8 +98,7 @@ namespace HealthGroceryListPlanner.Web.Controllers
             return RedirectToAction(
                 "Details",
                 "Categories",
-                new { id = product.CategoryId }
-            );
+                new { id = product.CategoryId });
         }
 
         // =========================
@@ -76,7 +117,7 @@ namespace HealthGroceryListPlanner.Web.Controllers
         }
 
         // =========================
-        // EDIT PRODUCT (GET)
+        // EDIT PRODUCT
         // =========================
         public async Task<IActionResult> Edit(int id)
         {
@@ -88,9 +129,6 @@ namespace HealthGroceryListPlanner.Web.Controllers
             return View(product);
         }
 
-        // =========================
-        // EDIT PRODUCT (POST)
-        // =========================
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(Product product)
@@ -104,12 +142,11 @@ namespace HealthGroceryListPlanner.Web.Controllers
             return RedirectToAction(
                 "Details",
                 "Categories",
-                new { id = product.CategoryId }
-            );
+                new { id = product.CategoryId });
         }
 
         // =========================
-        // DELETE PRODUCT (GET)
+        // DELETE PRODUCT
         // =========================
         public async Task<IActionResult> Delete(int id)
         {
@@ -123,9 +160,6 @@ namespace HealthGroceryListPlanner.Web.Controllers
             return View(product);
         }
 
-        // =========================
-        // DELETE PRODUCT (POST)
-        // =========================
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
@@ -143,54 +177,74 @@ namespace HealthGroceryListPlanner.Web.Controllers
             return RedirectToAction(
                 "Details",
                 "Categories",
-                new { id = categoryId }
-            );
+                new { id = categoryId });
         }
-        // =========================
-        // PRODUCTS BY SHOPPING LIST
-        // =========================
-        public async Task<IActionResult> List(int id)
-        {
-            var products = await _context.Products
-                .Include(p => p.Category)
-                .Where(p => p.ShoppingListId == id)
-                .OrderBy(p => p.Name)
-                .ToListAsync();
 
-            ViewBag.ShoppingListId = id;
-
-            return View(products);
-        }
-        
+        // =========================
+        // CHANGE QUANTITY
+        // =========================
         [HttpPost]
-        public async Task<IActionResult> AddToList(int productId, int shoppingListId)
+        public async Task<IActionResult> IncreaseQuantity(int productId)
         {
             var product = await _context.Products.FindAsync(productId);
 
             if (product == null)
                 return NotFound();
 
-            product.ShoppingListId = shoppingListId;
+            product.Quantity = (product.Quantity ?? 0) + 1;
 
             await _context.SaveChangesAsync();
 
-            return RedirectToAction("List", new { id = shoppingListId });
+            return Redirect(Request.Headers["Referer"].ToString());
         }
 
-        // =========================
-        // SELECT PRODUCTS FOR SHOPPING LIST
-        // =========================
-        public async Task<IActionResult> SelectForList(int shoppingListId)
+        [HttpPost]
+        public async Task<IActionResult> DecreaseQuantity(int productId)
         {
-            ViewBag.ShoppingListId = shoppingListId;
+            var product = await _context.Products.FindAsync(productId);
 
-            var categories = await _context.Categories
-                .Include(c => c.Products)
-                .OrderBy(c => c.Name)
-                .ToListAsync();
+            if (product == null)
+                return NotFound();
 
-            return View(categories);
+            if ((product.Quantity ?? 1) > 1)
+                product.Quantity--;
+
+            await _context.SaveChangesAsync();
+
+            return Redirect(Request.Headers["Referer"].ToString());
         }
 
+        [HttpPost]
+        public async Task<IActionResult> RemoveFromList(int productId)
+        {
+            var product = await _context.Products.FindAsync(productId);
+
+            if (product == null)
+                return NotFound();
+
+            var listId = product.ShoppingListId;
+
+            product.ShoppingListId = null;
+
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("List", new { id = listId });
+        }
+        
+            [HttpPost]
+            public async Task<IActionResult> UpdateUnit(int productId, UnitType unit)
+            {
+                var product = await _context.Products.FindAsync(productId);
+
+                if (product == null)
+                    return NotFound();
+
+                product.Unit = unit;
+
+                await _context.SaveChangesAsync();
+
+                return Redirect(Request.Headers["Referer"].ToString());
+            }
+        
     }
 }

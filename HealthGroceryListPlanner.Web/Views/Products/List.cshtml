@@ -1,20 +1,23 @@
 @model List<HealthGroceryListPlanner.Web.Models.Product>
+@using HealthGroceryListPlanner.Web.Models.Enums
 
 <h2>Products</h2>
 
 <a asp-controller="Products"
    asp-action="SelectForList"
    asp-route-shoppingListId="@ViewBag.ShoppingListId"
-   class="btn btn-success">
-   + Add Product
+   class="btn btn-success mb-3">
+    + Add Product
 </a>
 
-<table class="table mt-3">
+<table class="table table-hover">
 
     <thead>
         <tr>
             <th>Name</th>
+            <th style="width:260px;">Amount</th>
             <th>Category</th>
+            <th style="width:120px;"></th>
         </tr>
     </thead>
 
@@ -23,8 +26,105 @@
 @foreach (var product in Model)
 {
         <tr>
-            <td>@product.Name</td>
-            <td>@product.Category?.Name</td>
+
+            <!-- PRODUCT NAME -->
+            <td class="fw-semibold">
+                @product.Name
+            </td>
+
+
+            <!-- AMOUNT -->
+            <td>
+
+                <div class="d-inline-flex align-items-center gap-3">
+
+                    <!-- DECREASE -->
+                    <form asp-action="DecreaseQuantity" method="post">
+                        <input type="hidden" name="productId" value="@product.Id" />
+
+                        <button type="submit"
+                                class="btn btn-link text-dark p-0 fs-4 text-decoration-none">
+                            −
+                        </button>
+                    </form>
+
+
+                    <!-- QUANTITY -->
+                    <span class="fw-semibold">
+                        @(product.Quantity ?? 0)
+                    </span>
+
+
+                    <!-- INCREASE -->
+                    <form asp-action="IncreaseQuantity" method="post">
+                        <input type="hidden" name="productId" value="@product.Id" />
+
+                        <button type="submit"
+                                class="btn btn-link text-dark p-0 fs-4 text-decoration-none">
+                            +
+                        </button>
+                    </form>
+
+
+                    <!-- UNIT SELECT -->
+                <form asp-action="UpdateUnit" method="post">
+
+                    <input type="hidden" name="productId" value="@product.Id" />
+
+                    <select name="unit"
+                            class="form-select form-select-sm"
+                            onchange="this.form.submit()">
+
+                        @foreach (UnitType unit in Enum.GetValues(typeof(UnitType)))
+                        {
+                            var display = unit switch
+                            {
+                                UnitType.Pieces => "pcs",
+                                UnitType.Kilogram => "kg",
+                                UnitType.Gram => "g",
+                                UnitType.Liter => "L",
+                                UnitType.Milliliter => "ml",
+                                _ => unit.ToString()
+                            };
+
+                            <option value="@unit" selected="@(unit == product.Unit)">
+                                @display
+                            </option>
+                        }
+
+                    </select>
+
+                </form>  
+
+
+                </div>
+
+            </td>
+
+
+            <!-- CATEGORY -->
+            <td class="text-muted">
+                @product.Category?.Name
+            </td>
+
+
+            <!-- DELETE BUTTON -->
+            <td class="text-end">
+
+                <form asp-controller="Products"
+                      asp-action="RemoveFromList"
+                      method="post">
+
+                    <input type="hidden" name="productId" value="@product.Id" />
+
+                    <button class="btn btn-danger btn-sm">
+                        Delete
+                    </button>
+
+                </form>
+
+            </td>
+
         </tr>
 }
 
