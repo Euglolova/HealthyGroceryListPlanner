@@ -57,19 +57,24 @@ namespace HealthGroceryListPlanner.Web.Controllers
         // Delete Shopping List
         // =========================
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        [ActionName("Delete")]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            var list = await _context.ShoppingLists.FindAsync(id);
+            var list = await _context.ShoppingLists
+                .Include(l => l.Products)
+                .FirstOrDefaultAsync(l => l.Id == id);
 
             if (list != null)
             {
+                foreach (var product in list.Products)
+                {
+                    product.ShoppingListId = null;
+                }
+
                 _context.ShoppingLists.Remove(list);
                 await _context.SaveChangesAsync();
             }
 
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction("Index");
         }
     }
 }
