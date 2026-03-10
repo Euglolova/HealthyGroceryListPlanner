@@ -1,10 +1,20 @@
 @model List<HealthGroceryListPlanner.Domain.Models.ShoppingList>
 
-<h2>My Shopping Lists</h2>
+<h2 class="text-center mb-4">My Shopping Lists</h2>
 
-<a asp-action="Create" class="btn btn-success mb-3">
-    + Create New List
-</a>
+<div class="d-flex gap-2 mb-3">
+
+    <a asp-controller="Home"
+       asp-action="Index"
+       class="btn btn-secondary">
+        Home
+    </a>
+
+        <a asp-action="Create" class="btn btn-success">
+        + Create New List
+    </a>
+
+</div>
 
 <table class="table">
     <thead>
