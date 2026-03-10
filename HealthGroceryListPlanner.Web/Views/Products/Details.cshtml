@@ -1,5 +1,5 @@
-@model HealthGroceryListPlanner.Web.Models.Product
-@using HealthGroceryListPlanner.Web.Models.Enums
+@model HealthGroceryListPlanner.Domain.Models.Product
+@using HealthGroceryListPlanner.Domain.Enums
 
 <h2>Product Details</h2>
 
@@ -9,7 +9,7 @@
     <p><strong>Product Name:</strong> @Model.Name</p>
     <p>
         <strong>Quantity:</strong>
-        @(Model.Quantity.HasValue ? Model.Quantity.Value.ToString("0.##") : "")
+       @Model.Quantity.ToString()
         @(
             Model.Unit switch
             {

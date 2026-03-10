@@ -1,7 +1,8 @@
+using HealthGroceryListPlanner.Domain.Enums;
 using System.ComponentModel.DataAnnotations;
-using HealthGroceryListPlanner.Web.Models.Enums;
 
-namespace HealthGroceryListPlanner.Web.Models
+
+namespace HealthGroceryListPlanner.Domain.Models
 {
     public class Product
     {
@@ -11,11 +12,9 @@ namespace HealthGroceryListPlanner.Web.Models
         [StringLength(100, ErrorMessage = "Name cannot be longer than 100 characters")]
         public string Name { get; set; } = "";
 
-        // Теперь целое число
+        
         [Range(1, 1000, ErrorMessage = "Quantity must be between 1 and 1000")]
-        public int? Quantity { get; set; }
-
-        // Не обязательное поле
+        public int Quantity { get; set; } = 1;
         public UnitType? Unit { get; set; }
 
         [Display(Name = "Category")]

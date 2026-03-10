@@ -1,7 +1,7 @@
-using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
-using HealthGroceryListPlanner.Web.Models;
-using HealthGroceryListPlanner.Web.Data;
+using HealthGroceryListPlanner.Infrastructure.Data;
+using HealthGroceryListPlanner.Domain.Models;
+using System.Diagnostics;
 
 namespace HealthGroceryListPlanner.Web.Controllers;
 

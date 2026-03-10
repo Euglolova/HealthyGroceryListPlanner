@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace HealthGroceryListPlanner.Web.Models.Enums
+namespace HealthGroceryListPlanner.Domain.Enums
 {
     public enum UnitType
     {

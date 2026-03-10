@@ -1,4 +1,4 @@
-namespace HealthGroceryListPlanner.Web.Models;
+namespace HealthGroceryListPlanner.Domain.Models;
 
 public class ErrorViewModel
 {

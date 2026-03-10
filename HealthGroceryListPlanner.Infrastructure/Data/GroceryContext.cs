@@ -1,8 +1,7 @@
 using Microsoft.EntityFrameworkCore;
-using HealthGroceryListPlanner.Web.Models;
-using HealthGroceryListPlanner.Web.Models.Enums;
+using HealthGroceryListPlanner.Domain.Models;
 
-namespace HealthGroceryListPlanner.Web.Data
+namespace HealthGroceryListPlanner.Infrastructure.Data
 {
     public class GroceryContext : DbContext
     {

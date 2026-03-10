@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using HealthGroceryListPlanner.Web.Data;
-using HealthGroceryListPlanner.Web.Models;
+using HealthGroceryListPlanner.Infrastructure.Data;
+using HealthGroceryListPlanner.Domain.Models;
 
 namespace HealthGroceryListPlanner.Web.Controllers
 {
@@ -49,6 +49,25 @@ namespace HealthGroceryListPlanner.Web.Controllers
 
             _context.ShoppingLists.Add(list);
             await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Index));
+        }
+
+        // =========================
+        // Delete Shopping List
+        // =========================
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [ActionName("Delete")]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            var list = await _context.ShoppingLists.FindAsync(id);
+
+            if (list != null)
+            {
+                _context.ShoppingLists.Remove(list);
+                await _context.SaveChangesAsync();
+            }
 
             return RedirectToAction(nameof(Index));
         }

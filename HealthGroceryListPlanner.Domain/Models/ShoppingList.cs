@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace HealthGroceryListPlanner.Web.Models
+namespace HealthGroceryListPlanner.Domain.Models
 {
     public class ShoppingList
     {

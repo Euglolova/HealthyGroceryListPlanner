@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using HealthGroceryListPlanner.Web.Data;
-using HealthGroceryListPlanner.Web.Models;
+using HealthGroceryListPlanner.Infrastructure.Data;
+using HealthGroceryListPlanner.Domain.Models;
 
 namespace HealthGroceryListPlanner.Web.Controllers
 {
@@ -19,7 +19,6 @@ namespace HealthGroceryListPlanner.Web.Controllers
         // =========================
         // GET: /Categories
         // =========================
-
         public async Task<IActionResult> Index()
         {
             var categories = await _context.Categories
@@ -32,7 +31,6 @@ namespace HealthGroceryListPlanner.Web.Controllers
         // =========================
         // GET: /Categories/Details/5
         // =========================
-
         public async Task<IActionResult> Details(int id)
         {
             var category = await _context.Categories
@@ -62,15 +60,22 @@ namespace HealthGroceryListPlanner.Web.Controllers
         // POST
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Category category, IFormFile imageFile)
+        public async Task<IActionResult> Create(Category category, IFormFile? imageFile)
         {
+            if (!ModelState.IsValid)
+                return View(category);
+
             if (imageFile != null && imageFile.Length > 0)
             {
-                var fileName = Path.GetFileName(imageFile.FileName);
-                var path = Path.Combine(Directory.GetCurrentDirectory(),
-                                        "wwwroot/images", fileName);
+                var uploadsFolder = Path.Combine(_environment.WebRootPath, "images");
 
-                using (var stream = new FileStream(path, FileMode.Create))
+                if (!Directory.Exists(uploadsFolder))
+                    Directory.CreateDirectory(uploadsFolder);
+
+                var fileName = Guid.NewGuid().ToString() + Path.GetExtension(imageFile.FileName);
+                var filePath = Path.Combine(uploadsFolder, fileName);
+
+                using (var stream = new FileStream(filePath, FileMode.Create))
                 {
                     await imageFile.CopyToAsync(stream);
                 }

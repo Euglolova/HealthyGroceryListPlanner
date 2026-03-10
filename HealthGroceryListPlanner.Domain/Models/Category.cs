@@ -1,6 +1,7 @@
 using System.Collections.Generic;
+using HealthGroceryListPlanner.Domain.Models;
 
-namespace HealthGroceryListPlanner.Web.Models
+namespace HealthGroceryListPlanner.Domain.Models
 {
     public class Category
     {

@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
-using HealthGroceryListPlanner.Web.Data;
+using HealthGroceryListPlanner.Infrastructure.Data;
+using HealthGroceryListPlanner.Application.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,6 +9,8 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddDbContext<GroceryContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+builder.Services.AddScoped<ProductService>();
 
 var app = builder.Build();
 

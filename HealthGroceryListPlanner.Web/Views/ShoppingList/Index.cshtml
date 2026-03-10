@@ -1,4 +1,4 @@
-@model List<HealthGroceryListPlanner.Web.Models.ShoppingList>
+@model List<HealthGroceryListPlanner.Domain.Models.ShoppingList>
 
 <h2>My Shopping Lists</h2>
 
@@ -42,12 +42,21 @@
                         Open
                     </a>
 
-                    <a asp-controller="ShoppingList"
-                       asp-action="Delete"
-                       asp-route-id="@list.Id"
-                       class="btn btn-danger btn-sm">
-                        Delete
-                    </a>
+                    <form asp-controller="ShoppingList"
+                          asp-action="Delete"
+                          asp-route-id="@list.Id"
+                          method="post"
+                          style="display:inline">
+
+                        @Html.AntiForgeryToken()
+
+                        <button type="submit"
+                                class="btn btn-danger btn-sm"
+                                onclick="return confirm('Delete this list?')">
+                            Delete
+                        </button>
+
+                    </form>
 
                 </div>
             </td>
