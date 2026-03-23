@@ -14,6 +14,7 @@ public class HomeController : Controller
         _context = context;
     }
 
+   [Route("/")]
     public IActionResult Index()
     {
         return View();
