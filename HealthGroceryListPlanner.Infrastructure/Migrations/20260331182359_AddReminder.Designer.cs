@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HealthGroceryListPlanner.Infrastructure.Migrations
 {
     [DbContext(typeof(GroceryContext))]
-    [Migration("20260331003219_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20260331182359_AddReminder")]
+    partial class AddReminder
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -354,6 +354,36 @@ namespace HealthGroceryListPlanner.Infrastructure.Migrations
                     b.ToTable("Users");
                 });
 
+            modelBuilder.Entity("HealthGroceryListPlanner.Domain.Models.UserSettings", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("AutoSaveEnabled")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("NotificationsEnabled")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("ReminderFrequency")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Theme")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserSettings");
+                });
+
             modelBuilder.Entity("HealthGroceryListPlanner.Domain.Models.Category", b =>
                 {
                     b.HasOne("HealthGroceryListPlanner.Domain.Models.User", "User")
@@ -389,6 +419,17 @@ namespace HealthGroceryListPlanner.Infrastructure.Migrations
                 });
 
             modelBuilder.Entity("HealthGroceryListPlanner.Domain.Models.ShoppingList", b =>
+                {
+                    b.HasOne("HealthGroceryListPlanner.Domain.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("HealthGroceryListPlanner.Domain.Models.UserSettings", b =>
                 {
                     b.HasOne("HealthGroceryListPlanner.Domain.Models.User", "User")
                         .WithMany()

@@ -60,7 +60,6 @@ namespace HealthGroceryListPlanner.Web.Controllers
 
             if (user == null)
             {
-                // 🔥 ВАЖНО — привязываем ошибку к полю email
                 ModelState.AddModelError("email", "This email is already registered");
                 return View();
             }
@@ -72,12 +71,12 @@ namespace HealthGroceryListPlanner.Web.Controllers
 
         // ================= LOGOUT =================
         [HttpPost]
-        public async Task<IActionResult> Logout()
+        [ValidateAntiForgeryToken]
+        public IActionResult Logout()
         {
-            await HttpContext.SignOutAsync();
-            return RedirectToAction("Index", "Landing");
+            HttpContext.SignOutAsync();
+            return RedirectToAction("Login", "Account");
         }
-
         // ================= SIGN IN =================
         private async Task SignIn(User user)
         {
@@ -85,10 +84,7 @@ namespace HealthGroceryListPlanner.Web.Controllers
             {
                 new Claim(ClaimTypes.Name, user.Name),
                 new Claim(ClaimTypes.Email, user.Email),
-
-                // 🔥 ВОТ ЭТО ДОБАВЬ
                 new Claim(ClaimTypes.Role, user.Role),
-
                 new Claim("UserId", user.Id.ToString())
             };
 

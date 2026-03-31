@@ -14,6 +14,7 @@ namespace HealthGroceryListPlanner.Infrastructure.Data
         public DbSet<Category> Categories { get; set; }
         public DbSet<ShoppingList> ShoppingLists { get; set; }
         public DbSet<User> Users { get; set; }
+        public DbSet<UserSettings> UserSettings { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
