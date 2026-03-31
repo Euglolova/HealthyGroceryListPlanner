@@ -11,6 +11,10 @@ namespace HealthGroceryListPlanner.Domain.Models
 
         public string Emoji { get; set; } = string.Empty;
         public string ImageUrl { get; set; } = string.Empty;
+        public int? UserId { get; set; }
+        public User? User { get; set; }
+
+        public bool IsGlobal { get; set; } = false;
 
         public List<Product> Products { get; set; } = new List<Product>();
     }

@@ -1,11 +1,13 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.EntityFrameworkCore;
 using HealthGroceryListPlanner.Infrastructure.Data;
 using HealthGroceryListPlanner.Domain.Models;
+using System.Security.Claims;
 
 namespace HealthGroceryListPlanner.Web.Controllers
 {
-    [Authorize(Roles = "Admin")] // just admin
+    [Authorize(Roles = "Admin")]
     public class AdminController : Controller
     {
         private readonly GroceryContext _context;
@@ -15,17 +17,38 @@ namespace HealthGroceryListPlanner.Web.Controllers
             _context = context;
         }
 
-        // ================= USER LIST =================
-        public IActionResult Users()
+        // =========================
+        // GET CURRENT USER ID
+        // =========================
+        private int GetUserId()
         {
-            var users = _context.Users.ToList();
+            var claim = User.FindFirst("UserId");
+
+            if (claim == null || string.IsNullOrEmpty(claim.Value))
+                throw new Exception("User not authenticated");
+
+            return int.Parse(claim.Value);
+        }
+
+        // =========================
+        // USERS LIST
+        // =========================
+        public async Task<IActionResult> Users()
+        {
+            var users = await _context.Users
+                .OrderBy(u => u.Name)
+                .ToListAsync();
+
             return View(users);
         }
 
-        // ================= EDIT USER =================
-        public IActionResult Edit(int id)
+        // =========================
+        // EDIT USER (GET)
+        // =========================
+        public async Task<IActionResult> Edit(int id)
         {
-            var user = _context.Users.FirstOrDefault(u => u.Id == id);
+            var user = await _context.Users
+                .FirstOrDefaultAsync(u => u.Id == id);
 
             if (user == null)
                 return NotFound();
@@ -33,28 +56,39 @@ namespace HealthGroceryListPlanner.Web.Controllers
             return View(user);
         }
 
+        // =========================
+        // EDIT USER (POST)
+        // =========================
         [HttpPost]
-        public IActionResult Edit(User user)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(User user)
         {
-            var existingUser = _context.Users.FirstOrDefault(u => u.Id == user.Id);
+            if (!ModelState.IsValid)
+                return View(user);
+
+            var existingUser = await _context.Users
+                .FirstOrDefaultAsync(u => u.Id == user.Id);
 
             if (existingUser == null)
                 return NotFound();
 
-            // 🔥 обновляем только нужные поля
+            // 🔥 обновляем только нужное
             existingUser.Name = user.Name;
             existingUser.Email = user.Email;
             existingUser.Role = user.Role;
 
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
 
-            return RedirectToAction("Users");
+            return RedirectToAction(nameof(Users));
         }
 
-        // ================= DELETE USER =================
-        public IActionResult Delete(int id)
+        // =========================
+        // DELETE USER (GET)
+        // =========================
+        public async Task<IActionResult> Delete(int id)
         {
-            var user = _context.Users.FirstOrDefault(u => u.Id == id);
+            var user = await _context.Users
+                .FirstOrDefaultAsync(u => u.Id == id);
 
             if (user == null)
                 return NotFound();
@@ -62,18 +96,29 @@ namespace HealthGroceryListPlanner.Web.Controllers
             return View(user);
         }
 
-        [HttpPost]
-        public IActionResult DeleteConfirmed(int id)
+        // =========================
+        // DELETE USER (POST)
+        // =========================
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var user = _context.Users.FirstOrDefault(u => u.Id == id);
+            var currentUserId = GetUserId();
+
+            // 🔥 защита от самоуничтожения
+            if (id == currentUserId)
+                return BadRequest("You cannot delete yourself");
+
+            var user = await _context.Users
+                .FirstOrDefaultAsync(u => u.Id == id);
 
             if (user != null)
             {
                 _context.Users.Remove(user);
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
             }
 
-            return RedirectToAction("Users");
+            return RedirectToAction(nameof(Users));
         }
     }
 }

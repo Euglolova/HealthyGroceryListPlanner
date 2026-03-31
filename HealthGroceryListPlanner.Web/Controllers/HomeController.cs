@@ -7,6 +7,15 @@ namespace HealthGroceryListPlanner.Web.Controllers;
 
 public class HomeController : Controller
 {
+    private int GetUserId()
+        {
+            var claim = User.FindFirst("UserId");
+
+            if (claim == null)
+                throw new Exception("User not authenticated");
+
+            return int.Parse(claim.Value);
+        }
     private readonly GroceryContext _context;
 
     public HomeController(GroceryContext context)

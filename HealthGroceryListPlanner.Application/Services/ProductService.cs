@@ -14,18 +14,25 @@ namespace HealthGroceryListPlanner.Application.Services
             _context = context;
         }
 
-        public async Task<List<Product>> GetProductsByList(int listId)
+        // =========================
+        // PRODUCTS IN LIST
+        // =========================
+        public async Task<List<Product>> GetProductsByList(int listId, int userId)
         {
             return await _context.Products
                 .Include(p => p.Category)
-                .Where(p => p.ShoppingListId == listId)
+                .Where(p => p.ShoppingListId == listId && p.UserId == userId)
                 .OrderBy(p => p.Name)
                 .ToListAsync();
         }
 
-        public async Task IncreaseQuantity(int productId)
+        // =========================
+        // INCREASE
+        // =========================
+        public async Task IncreaseQuantity(int productId, int userId)
         {
-            var product = await _context.Products.FindAsync(productId);
+            var product = await _context.Products
+                .FirstOrDefaultAsync(p => p.Id == productId && p.UserId == userId);
 
             if (product != null)
             {
@@ -34,9 +41,13 @@ namespace HealthGroceryListPlanner.Application.Services
             }
         }
 
-        public async Task DecreaseQuantity(int productId)
+        // =========================
+        // DECREASE
+        // =========================
+        public async Task DecreaseQuantity(int productId, int userId)
         {
-            var product = await _context.Products.FindAsync(productId);
+            var product = await _context.Products
+                .FirstOrDefaultAsync(p => p.Id == productId && p.UserId == userId);
 
             if (product != null && product.Quantity > 1)
             {
@@ -45,20 +56,52 @@ namespace HealthGroceryListPlanner.Application.Services
             }
         }
 
-        public async Task AddToList(int productId, int listId)
+        // =========================
+        // ADD TO LIST 
+        // =========================
+        public async Task AddToList(int productId, int listId, int userId)
         {
-            var product = await _context.Products.FindAsync(productId);
+            var product = await _context.Products
+                .FirstOrDefaultAsync(p =>
+                    p.Id == productId &&
+                    (p.UserId == userId || p.IsGlobal));
 
-            if (product != null)
+            if (product == null)
+                return;
+
+           
+            if (product.IsGlobal)
+            {
+                var userProduct = new Product
+                {
+                    Name = product.Name,
+                    Emoji = product.Emoji,
+                    CategoryId = product.CategoryId,
+                    Quantity = 1,
+                    Unit = product.Unit,
+                    IsPurchased = false,
+                    ShoppingListId = listId,
+                    UserId = userId,
+                    IsGlobal = false
+                };
+
+                _context.Products.Add(userProduct);
+            }
+            else
             {
                 product.ShoppingListId = listId;
-                await _context.SaveChangesAsync();
             }
+
+            await _context.SaveChangesAsync();
         }
 
-        public async Task RemoveFromList(int productId)
+        // =========================
+        // REMOVE
+        // =========================
+        public async Task RemoveFromList(int productId, int userId)
         {
-            var product = await _context.Products.FindAsync(productId);
+            var product = await _context.Products
+                .FirstOrDefaultAsync(p => p.Id == productId && p.UserId == userId);
 
             if (product != null)
             {
@@ -67,9 +110,13 @@ namespace HealthGroceryListPlanner.Application.Services
             }
         }
 
-        public async Task UpdateUnit(int productId, UnitType unit)
+        // =========================
+        // UPDATE UNIT
+        // =========================
+        public async Task UpdateUnit(int productId, UnitType unit, int userId)
         {
-            var product = await _context.Products.FindAsync(productId);
+            var product = await _context.Products
+                .FirstOrDefaultAsync(p => p.Id == productId && p.UserId == userId);
 
             if (product != null)
             {
@@ -77,16 +124,36 @@ namespace HealthGroceryListPlanner.Application.Services
                 await _context.SaveChangesAsync();
             }
         }
-        public async Task<List<Category>> GetCategoriesWithProducts()
+
+        // =========================
+        // CATEGORIES (🔥 ФИЛЬТР)
+        // =========================
+        public async Task<List<Category>> GetCategoriesWithProducts(int userId)
         {
-            return await _context.Categories
+            var categories = await _context.Categories
                 .Include(c => c.Products)
+                .Where(c => c.IsGlobal || c.UserId == userId) // 🔥 ВОТ ГЛАВНОЕ
                 .OrderBy(c => c.Name)
                 .ToListAsync();
+
+            foreach (var category in categories)
+            {
+                category.Products = category.Products
+                    .Where(p => p.UserId == userId || p.IsGlobal)
+                    .ToList();
+            }
+
+            return categories;
         }
 
-        public async Task CreateProduct(Product product)
+        // =========================
+        // CREATE PRODUCT
+        // =========================
+        public async Task CreateProduct(Product product, int userId)
         {
+            product.UserId = userId;
+            product.IsGlobal = false;
+
             _context.Products.Add(product);
             await _context.SaveChangesAsync();
         }

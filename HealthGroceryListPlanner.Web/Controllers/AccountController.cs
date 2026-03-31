@@ -9,6 +9,15 @@ namespace HealthGroceryListPlanner.Web.Controllers
 {
     public class AccountController : Controller
     {
+        private int GetUserId()
+        {
+            var claim = User.FindFirst("UserId");
+
+            if (claim == null)
+                throw new Exception("User not authenticated");
+
+            return int.Parse(claim.Value);
+        }
         private readonly AuthService _authService;
 
         public AccountController(AuthService authService)

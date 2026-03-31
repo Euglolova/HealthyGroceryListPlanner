@@ -31,11 +31,19 @@ namespace HealthGroceryListPlanner.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<bool>("IsGlobal")
+                        .HasColumnType("INTEGER");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<int?>("UserId")
+                        .HasColumnType("INTEGER");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Categories");
 
@@ -45,6 +53,7 @@ namespace HealthGroceryListPlanner.Infrastructure.Migrations
                             Id = 1,
                             Emoji = "",
                             ImageUrl = "/images/vegetables.jpg",
+                            IsGlobal = true,
                             Name = "Vegetables"
                         },
                         new
@@ -52,6 +61,7 @@ namespace HealthGroceryListPlanner.Infrastructure.Migrations
                             Id = 2,
                             Emoji = "",
                             ImageUrl = "/images/fruits.jpg",
+                            IsGlobal = true,
                             Name = "Fruits and Berries"
                         },
                         new
@@ -59,6 +69,7 @@ namespace HealthGroceryListPlanner.Infrastructure.Migrations
                             Id = 3,
                             Emoji = "",
                             ImageUrl = "/images/protein.jpg",
+                            IsGlobal = true,
                             Name = "Protein"
                         },
                         new
@@ -66,6 +77,7 @@ namespace HealthGroceryListPlanner.Infrastructure.Migrations
                             Id = 4,
                             Emoji = "",
                             ImageUrl = "/images/dairy.jpg",
+                            IsGlobal = true,
                             Name = "Dairy"
                         },
                         new
@@ -73,6 +85,7 @@ namespace HealthGroceryListPlanner.Infrastructure.Migrations
                             Id = 5,
                             Emoji = "",
                             ImageUrl = "/images/grains.jpg",
+                            IsGlobal = true,
                             Name = "Whole Grains"
                         },
                         new
@@ -80,6 +93,7 @@ namespace HealthGroceryListPlanner.Infrastructure.Migrations
                             Id = 6,
                             Emoji = "",
                             ImageUrl = "/images/nuts.jpg",
+                            IsGlobal = true,
                             Name = "Nuts & Seeds"
                         },
                         new
@@ -87,6 +101,7 @@ namespace HealthGroceryListPlanner.Infrastructure.Migrations
                             Id = 7,
                             Emoji = "",
                             ImageUrl = "/images/fats.jpg",
+                            IsGlobal = true,
                             Name = "Healthy Fats"
                         },
                         new
@@ -94,6 +109,7 @@ namespace HealthGroceryListPlanner.Infrastructure.Migrations
                             Id = 8,
                             Emoji = "",
                             ImageUrl = "/images/beverages.jpg",
+                            IsGlobal = true,
                             Name = "Beverages"
                         });
                 });
@@ -110,6 +126,9 @@ namespace HealthGroceryListPlanner.Infrastructure.Migrations
                     b.Property<string>("Emoji")
                         .IsRequired()
                         .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsGlobal")
+                        .HasColumnType("INTEGER");
 
                     b.Property<bool>("IsPurchased")
                         .HasColumnType("INTEGER");
@@ -128,11 +147,16 @@ namespace HealthGroceryListPlanner.Infrastructure.Migrations
                     b.Property<int?>("Unit")
                         .HasColumnType("INTEGER");
 
+                    b.Property<int?>("UserId")
+                        .HasColumnType("INTEGER");
+
                     b.HasKey("Id");
 
                     b.HasIndex("CategoryId");
 
                     b.HasIndex("ShoppingListId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Products");
 
@@ -142,6 +166,7 @@ namespace HealthGroceryListPlanner.Infrastructure.Migrations
                             Id = 201,
                             CategoryId = 1,
                             Emoji = "🥕",
+                            IsGlobal = true,
                             IsPurchased = false,
                             Name = "Carrot",
                             Quantity = 1,
@@ -152,6 +177,7 @@ namespace HealthGroceryListPlanner.Infrastructure.Migrations
                             Id = 202,
                             CategoryId = 1,
                             Emoji = "🥔",
+                            IsGlobal = true,
                             IsPurchased = false,
                             Name = "Potato",
                             Quantity = 1,
@@ -162,58 +188,9 @@ namespace HealthGroceryListPlanner.Infrastructure.Migrations
                             Id = 203,
                             CategoryId = 1,
                             Emoji = "🍅",
+                            IsGlobal = true,
                             IsPurchased = false,
                             Name = "Tomato",
-                            Quantity = 1,
-                            Unit = 0
-                        },
-                        new
-                        {
-                            Id = 204,
-                            CategoryId = 1,
-                            Emoji = "🥒",
-                            IsPurchased = false,
-                            Name = "Cucumber",
-                            Quantity = 1,
-                            Unit = 0
-                        },
-                        new
-                        {
-                            Id = 205,
-                            CategoryId = 1,
-                            Emoji = "🧅",
-                            IsPurchased = false,
-                            Name = "Onion",
-                            Quantity = 1,
-                            Unit = 0
-                        },
-                        new
-                        {
-                            Id = 206,
-                            CategoryId = 1,
-                            Emoji = "🧄",
-                            IsPurchased = false,
-                            Name = "Garlic",
-                            Quantity = 1,
-                            Unit = 0
-                        },
-                        new
-                        {
-                            Id = 207,
-                            CategoryId = 1,
-                            Emoji = "🍆",
-                            IsPurchased = false,
-                            Name = "Eggplant",
-                            Quantity = 1,
-                            Unit = 0
-                        },
-                        new
-                        {
-                            Id = 208,
-                            CategoryId = 1,
-                            Emoji = "🌽",
-                            IsPurchased = false,
-                            Name = "Corn",
                             Quantity = 1,
                             Unit = 0
                         },
@@ -222,6 +199,7 @@ namespace HealthGroceryListPlanner.Infrastructure.Migrations
                             Id = 301,
                             CategoryId = 2,
                             Emoji = "🍎",
+                            IsGlobal = true,
                             IsPurchased = false,
                             Name = "Apple",
                             Quantity = 1,
@@ -232,38 +210,9 @@ namespace HealthGroceryListPlanner.Infrastructure.Migrations
                             Id = 302,
                             CategoryId = 2,
                             Emoji = "🍌",
+                            IsGlobal = true,
                             IsPurchased = false,
                             Name = "Banana",
-                            Quantity = 1,
-                            Unit = 0
-                        },
-                        new
-                        {
-                            Id = 303,
-                            CategoryId = 2,
-                            Emoji = "🍊",
-                            IsPurchased = false,
-                            Name = "Orange",
-                            Quantity = 1,
-                            Unit = 0
-                        },
-                        new
-                        {
-                            Id = 304,
-                            CategoryId = 2,
-                            Emoji = "🍓",
-                            IsPurchased = false,
-                            Name = "Strawberry",
-                            Quantity = 1,
-                            Unit = 0
-                        },
-                        new
-                        {
-                            Id = 305,
-                            CategoryId = 2,
-                            Emoji = "🍇",
-                            IsPurchased = false,
-                            Name = "Grapes",
                             Quantity = 1,
                             Unit = 0
                         },
@@ -272,6 +221,7 @@ namespace HealthGroceryListPlanner.Infrastructure.Migrations
                             Id = 401,
                             CategoryId = 3,
                             Emoji = "🍗",
+                            IsGlobal = true,
                             IsPurchased = false,
                             Name = "Chicken Breast",
                             Quantity = 1,
@@ -282,38 +232,9 @@ namespace HealthGroceryListPlanner.Infrastructure.Migrations
                             Id = 402,
                             CategoryId = 3,
                             Emoji = "🐟",
+                            IsGlobal = true,
                             IsPurchased = false,
                             Name = "Salmon",
-                            Quantity = 1,
-                            Unit = 0
-                        },
-                        new
-                        {
-                            Id = 403,
-                            CategoryId = 3,
-                            Emoji = "🥚",
-                            IsPurchased = false,
-                            Name = "Eggs",
-                            Quantity = 1,
-                            Unit = 0
-                        },
-                        new
-                        {
-                            Id = 404,
-                            CategoryId = 3,
-                            Emoji = "🧊",
-                            IsPurchased = false,
-                            Name = "Tofu",
-                            Quantity = 1,
-                            Unit = 0
-                        },
-                        new
-                        {
-                            Id = 405,
-                            CategoryId = 3,
-                            Emoji = "🫘",
-                            IsPurchased = false,
-                            Name = "Beans",
                             Quantity = 1,
                             Unit = 0
                         },
@@ -322,6 +243,7 @@ namespace HealthGroceryListPlanner.Infrastructure.Migrations
                             Id = 501,
                             CategoryId = 4,
                             Emoji = "🥛",
+                            IsGlobal = true,
                             IsPurchased = false,
                             Name = "Milk",
                             Quantity = 1,
@@ -329,91 +251,12 @@ namespace HealthGroceryListPlanner.Infrastructure.Migrations
                         },
                         new
                         {
-                            Id = 502,
-                            CategoryId = 4,
-                            Emoji = "🧀",
-                            IsPurchased = false,
-                            Name = "Cheese",
-                            Quantity = 1,
-                            Unit = 0
-                        },
-                        new
-                        {
-                            Id = 503,
-                            CategoryId = 4,
-                            Emoji = "🥣",
-                            IsPurchased = false,
-                            Name = "Yogurt",
-                            Quantity = 1,
-                            Unit = 0
-                        },
-                        new
-                        {
-                            Id = 504,
-                            CategoryId = 4,
-                            Emoji = "🧈",
-                            IsPurchased = false,
-                            Name = "Butter",
-                            Quantity = 1,
-                            Unit = 0
-                        },
-                        new
-                        {
-                            Id = 505,
-                            CategoryId = 4,
-                            Emoji = "🥛",
-                            IsPurchased = false,
-                            Name = "Cottage Cheese",
-                            Quantity = 1,
-                            Unit = 0
-                        },
-                        new
-                        {
                             Id = 601,
                             CategoryId = 5,
-                            Emoji = "🍚",
-                            IsPurchased = false,
-                            Name = "Brown Rice",
-                            Quantity = 1,
-                            Unit = 0
-                        },
-                        new
-                        {
-                            Id = 602,
-                            CategoryId = 5,
                             Emoji = "🥣",
+                            IsGlobal = true,
                             IsPurchased = false,
                             Name = "Oats",
-                            Quantity = 1,
-                            Unit = 0
-                        },
-                        new
-                        {
-                            Id = 603,
-                            CategoryId = 5,
-                            Emoji = "🍚",
-                            IsPurchased = false,
-                            Name = "Quinoa",
-                            Quantity = 1,
-                            Unit = 0
-                        },
-                        new
-                        {
-                            Id = 604,
-                            CategoryId = 5,
-                            Emoji = "🍞",
-                            IsPurchased = false,
-                            Name = "Whole Wheat Bread",
-                            Quantity = 1,
-                            Unit = 0
-                        },
-                        new
-                        {
-                            Id = 605,
-                            CategoryId = 5,
-                            Emoji = "🌾",
-                            IsPurchased = false,
-                            Name = "Barley",
                             Quantity = 1,
                             Unit = 0
                         },
@@ -422,48 +265,9 @@ namespace HealthGroceryListPlanner.Infrastructure.Migrations
                             Id = 701,
                             CategoryId = 6,
                             Emoji = "🌰",
+                            IsGlobal = true,
                             IsPurchased = false,
                             Name = "Almonds",
-                            Quantity = 1,
-                            Unit = 0
-                        },
-                        new
-                        {
-                            Id = 702,
-                            CategoryId = 6,
-                            Emoji = "🌰",
-                            IsPurchased = false,
-                            Name = "Walnuts",
-                            Quantity = 1,
-                            Unit = 0
-                        },
-                        new
-                        {
-                            Id = 703,
-                            CategoryId = 6,
-                            Emoji = "🥜",
-                            IsPurchased = false,
-                            Name = "Cashews",
-                            Quantity = 1,
-                            Unit = 0
-                        },
-                        new
-                        {
-                            Id = 704,
-                            CategoryId = 6,
-                            Emoji = "🌱",
-                            IsPurchased = false,
-                            Name = "Chia Seeds",
-                            Quantity = 1,
-                            Unit = 0
-                        },
-                        new
-                        {
-                            Id = 705,
-                            CategoryId = 6,
-                            Emoji = "🌱",
-                            IsPurchased = false,
-                            Name = "Flax Seeds",
                             Quantity = 1,
                             Unit = 0
                         },
@@ -472,48 +276,9 @@ namespace HealthGroceryListPlanner.Infrastructure.Migrations
                             Id = 801,
                             CategoryId = 7,
                             Emoji = "🥑",
+                            IsGlobal = true,
                             IsPurchased = false,
                             Name = "Avocado",
-                            Quantity = 1,
-                            Unit = 0
-                        },
-                        new
-                        {
-                            Id = 802,
-                            CategoryId = 7,
-                            Emoji = "🫒",
-                            IsPurchased = false,
-                            Name = "Olive Oil",
-                            Quantity = 1,
-                            Unit = 0
-                        },
-                        new
-                        {
-                            Id = 803,
-                            CategoryId = 7,
-                            Emoji = "🥥",
-                            IsPurchased = false,
-                            Name = "Coconut Oil",
-                            Quantity = 1,
-                            Unit = 0
-                        },
-                        new
-                        {
-                            Id = 804,
-                            CategoryId = 7,
-                            Emoji = "🍫",
-                            IsPurchased = false,
-                            Name = "Dark Chocolate",
-                            Quantity = 1,
-                            Unit = 0
-                        },
-                        new
-                        {
-                            Id = 805,
-                            CategoryId = 7,
-                            Emoji = "🥜",
-                            IsPurchased = false,
-                            Name = "Peanut Butter",
                             Quantity = 1,
                             Unit = 0
                         },
@@ -522,48 +287,9 @@ namespace HealthGroceryListPlanner.Infrastructure.Migrations
                             Id = 901,
                             CategoryId = 8,
                             Emoji = "☕",
+                            IsGlobal = true,
                             IsPurchased = false,
                             Name = "Coffee",
-                            Quantity = 1,
-                            Unit = 0
-                        },
-                        new
-                        {
-                            Id = 902,
-                            CategoryId = 8,
-                            Emoji = "🍵",
-                            IsPurchased = false,
-                            Name = "Green Tea",
-                            Quantity = 1,
-                            Unit = 0
-                        },
-                        new
-                        {
-                            Id = 903,
-                            CategoryId = 8,
-                            Emoji = "🍵",
-                            IsPurchased = false,
-                            Name = "Black Tea",
-                            Quantity = 1,
-                            Unit = 0
-                        },
-                        new
-                        {
-                            Id = 904,
-                            CategoryId = 8,
-                            Emoji = "🍊",
-                            IsPurchased = false,
-                            Name = "Orange Juice",
-                            Quantity = 1,
-                            Unit = 0
-                        },
-                        new
-                        {
-                            Id = 905,
-                            CategoryId = 8,
-                            Emoji = "🥤",
-                            IsPurchased = false,
-                            Name = "Smoothie",
                             Quantity = 1,
                             Unit = 0
                         });
@@ -583,7 +309,12 @@ namespace HealthGroceryListPlanner.Infrastructure.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("TEXT");
 
+                    b.Property<int>("UserId")
+                        .HasColumnType("INTEGER");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("ShoppingLists");
                 });
@@ -620,6 +351,15 @@ namespace HealthGroceryListPlanner.Infrastructure.Migrations
                     b.ToTable("Users");
                 });
 
+            modelBuilder.Entity("HealthGroceryListPlanner.Domain.Models.Category", b =>
+                {
+                    b.HasOne("HealthGroceryListPlanner.Domain.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("HealthGroceryListPlanner.Domain.Models.Product", b =>
                 {
                     b.HasOne("HealthGroceryListPlanner.Domain.Models.Category", "Category")
@@ -630,11 +370,30 @@ namespace HealthGroceryListPlanner.Infrastructure.Migrations
 
                     b.HasOne("HealthGroceryListPlanner.Domain.Models.ShoppingList", "ShoppingList")
                         .WithMany("Products")
-                        .HasForeignKey("ShoppingListId");
+                        .HasForeignKey("ShoppingListId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.HasOne("HealthGroceryListPlanner.Domain.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Category");
 
                     b.Navigation("ShoppingList");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("HealthGroceryListPlanner.Domain.Models.ShoppingList", b =>
+                {
+                    b.HasOne("HealthGroceryListPlanner.Domain.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("HealthGroceryListPlanner.Domain.Models.Category", b =>

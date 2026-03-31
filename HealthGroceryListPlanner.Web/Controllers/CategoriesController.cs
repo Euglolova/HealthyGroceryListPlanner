@@ -1,12 +1,15 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
 using HealthGroceryListPlanner.Infrastructure.Data;
 using HealthGroceryListPlanner.Domain.Models;
 
 namespace HealthGroceryListPlanner.Web.Controllers
 {
+    [Authorize] // 🔥 только для залогиненных
     public class CategoriesController : Controller
     {
+    
         private readonly GroceryContext _context;
         private readonly IWebHostEnvironment _environment;
 
@@ -17,11 +20,27 @@ namespace HealthGroceryListPlanner.Web.Controllers
         }
 
         // =========================
+        // GET CURRENT USER ID
+        // =========================
+        private int GetUserId()
+        {
+            var claim = User.FindFirst("UserId");
+
+            if (claim == null)
+                throw new Exception("User not authenticated");
+
+            return int.Parse(claim.Value);
+        }
+
+        // =========================
         // GET: /Categories
         // =========================
         public async Task<IActionResult> Index()
         {
+            var userId = GetUserId();
+
             var categories = await _context.Categories
+                .Where(c => c.IsGlobal || c.UserId == userId)
                 .OrderBy(c => c.Name)
                 .ToListAsync();
 
@@ -33,14 +52,20 @@ namespace HealthGroceryListPlanner.Web.Controllers
         // =========================
         public async Task<IActionResult> Details(int id)
         {
+            var userId = GetUserId();
+
             var category = await _context.Categories
                 .Include(c => c.Products)
-                .FirstOrDefaultAsync(c => c.Id == id);
+                .FirstOrDefaultAsync(c =>
+                    c.Id == id &&
+                    (c.IsGlobal || c.UserId == userId));
 
             if (category == null)
                 return NotFound();
 
+            // 🔥 фильтр продуктов
             category.Products = category.Products
+                .Where(p => p.IsGlobal || p.UserId == userId)
                 .OrderBy(p => p.Name)
                 .ToList();
 
@@ -65,6 +90,15 @@ namespace HealthGroceryListPlanner.Web.Controllers
             if (!ModelState.IsValid)
                 return View(category);
 
+            var userId = GetUserId();
+
+            // 🔥 привязка к пользователю
+            category.UserId = userId;
+            category.IsGlobal = false;
+
+            // =========================
+            // IMAGE UPLOAD
+            // =========================
             if (imageFile != null && imageFile.Length > 0)
             {
                 var uploadsFolder = Path.Combine(_environment.WebRootPath, "images");
@@ -82,6 +116,11 @@ namespace HealthGroceryListPlanner.Web.Controllers
 
                 category.ImageUrl = "/images/" + fileName;
             }
+            else
+            {
+                // fallback
+                category.ImageUrl = "/images/default.jpg";
+            }
 
             _context.Categories.Add(category);
             await _context.SaveChangesAsync();
@@ -93,10 +132,16 @@ namespace HealthGroceryListPlanner.Web.Controllers
         // DELETE CATEGORY
         // =========================
 
+        // GET
         public async Task<IActionResult> Delete(int id)
         {
+            var userId = GetUserId();
+
             var category = await _context.Categories
-                .FirstOrDefaultAsync(c => c.Id == id);
+                .FirstOrDefaultAsync(c =>
+                    c.Id == id &&
+                    c.UserId == userId &&
+                    !c.IsGlobal); // 🔥 нельзя удалить системные
 
             if (category == null)
                 return NotFound();
@@ -104,11 +149,18 @@ namespace HealthGroceryListPlanner.Web.Controllers
             return View(category);
         }
 
+        // POST
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var category = await _context.Categories.FindAsync(id);
+            var userId = GetUserId();
+
+            var category = await _context.Categories
+                .FirstOrDefaultAsync(c =>
+                    c.Id == id &&
+                    c.UserId == userId &&
+                    !c.IsGlobal);
 
             if (category != null)
             {
