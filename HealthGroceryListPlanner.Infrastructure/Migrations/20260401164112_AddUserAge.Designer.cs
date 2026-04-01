@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace HealthGroceryListPlanner.Infrastructure.Migrations
 {
     [DbContext(typeof(GroceryContext))]
-    [Migration("20260331182359_AddReminder")]
-    partial class AddReminder
+    [Migration("20260401164112_AddUserAge")]
+    partial class AddUserAge
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -326,6 +326,9 @@ namespace HealthGroceryListPlanner.Infrastructure.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("Age")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Email")

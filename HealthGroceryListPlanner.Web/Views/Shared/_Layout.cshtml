@@ -1,4 +1,7 @@
-﻿<!DOCTYPE html>
+﻿@using HealthGroceryListPlanner.Infrastructure.Data
+@inject GroceryContext context
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -9,7 +12,24 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/HealthGroceryListPlanner.Web.styles.css" asp-append-version="true" />
 </head>
-<body id="appBody">
+@{
+    var userIdClaim = User.FindFirst("UserId");
+    string themeClass = "";
+
+    if (userIdClaim != null)
+    {
+        var userId = int.Parse(userIdClaim.Value);
+
+        var settings = context.UserSettings
+            .FirstOrDefault(s => s.UserId == userId);
+
+        if (settings?.Theme == "Dark")
+        {
+            themeClass = "dark-mode";
+        }
+    }
+}
+<<body id="appBody" class="@themeClass">
     
     <div class="container">
         <main role="main" class="pb-3">

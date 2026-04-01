@@ -6,6 +6,7 @@ namespace HealthGroceryListPlanner.Domain.Models
     {
         public string Role { get; set; } = "User";
         public string Name { get; set; } = string.Empty;
+        public int? Age { get; set; }
         public int Id { get; set; }
 
         [Required]

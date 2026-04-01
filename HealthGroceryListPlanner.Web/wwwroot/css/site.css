@@ -119,3 +119,57 @@ body {
 .dark-mode .btn-success {
     background-color: #28a745;
 }
+/* ===== DARK MODE GLOBAL ===== */
+.dark-mode {
+    background-color: #121212;
+    color: #ffffff;
+}
+
+/* ТЕКСТ */
+.dark-mode h1,
+.dark-mode h2,
+.dark-mode h3,
+.dark-mode h4,
+.dark-mode h5,
+.dark-mode p,
+.dark-mode span,
+.dark-mode label {
+    color: #ffffff;
+}
+
+/* КАРТОЧКИ */
+.dark-mode .card {
+    background-color: #1e1e1e;
+    color: #ffffff;
+    border: 1px solid #2c2c2c;
+}
+
+/* INPUT / SELECT */
+.dark-mode .form-control,
+.dark-mode .form-select {
+    background-color: #2a2a2a;
+    color: #ffffff;
+    border: 1px solid #444;
+}
+
+/* PLACEHOLDER */
+.dark-mode ::placeholder {
+    color: #aaa;
+}
+
+/* BUTTONS */
+.dark-mode .btn-outline-secondary {
+    color: #ffffff;
+    border-color: #555;
+}
+
+/* LINKS */
+.dark-mode a {
+    color: #90caf9;
+}
+
+/* DANGER ZONE */
+.dark-mode .border-danger {
+    border-color: #ff6b6b !important;
+}
+

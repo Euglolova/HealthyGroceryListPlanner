@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace HealthGroceryListPlanner.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class AddReminder : Migration
+    public partial class AddUserAge : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -21,6 +21,7 @@ namespace HealthGroceryListPlanner.Infrastructure.Migrations
                         .Annotation("Sqlite:Autoincrement", true),
                     Role = table.Column<string>(type: "TEXT", nullable: false),
                     Name = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
+                    Age = table.Column<int>(type: "INTEGER", nullable: true),
                     Email = table.Column<string>(type: "TEXT", maxLength: 100, nullable: false),
                     PasswordHash = table.Column<string>(type: "TEXT", nullable: false)
                 },
