@@ -1,0 +1,65 @@
+@model IEnumerable<HealthGroceryListPlanner.Domain.Models.Category>
+
+<div class="container">
+
+    <h2 class="text-center mb-4">Categories</h2>
+
+    <div class="d-flex gap-2 mb-3">
+
+    <a asp-controller="Home"
+       asp-action="Index"
+       class="btn btn-secondary">
+        Home
+    </a>
+
+        <a asp-action="Create" class="btn btn-success">
+        + Create New List
+    </a>
+
+</div>
+
+    </div>
+
+
+
+ 
+
+    <div class="row">
+
+        @foreach (var category in Model)
+        {
+            <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+                <div class="card shadow-sm h-100 category-card">
+
+                    <a asp-action="Details"
+                       asp-route-id="@category.Id"
+                       class="text-decoration-none text-dark">
+
+                        <img src="@(string.IsNullOrEmpty(category.ImageUrl) 
+                                    ? "/images/default-category.png" 
+                                    : category.ImageUrl)"
+                             class="card-img-top"
+                             style="height:200px; object-fit:cover;" />
+
+                        <div class="card-body text-center">
+                            <h5 class="fw-bold">@category.Name</h5>
+                        </div>
+
+                    </a>
+
+                    <div class="card-footer text-center category-actions">
+
+                        <a asp-action="Delete"
+                           asp-route-id="@category.Id"
+                           class="btn btn-outline-danger btn-sm">
+                           Delete
+                        </a>
+
+                    </div>
+
+                </div>
+            </div>
+        }
+
+    </div>
+</div>

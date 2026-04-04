@@ -1,0 +1,102 @@
+@model HealthGroceryListPlanner.Domain.Models.UserSettings
+
+<div class="container mt-5 mb-5">
+
+    <!-- NAV -->
+    <div class="d-flex justify-content-between mb-4">
+        <a asp-controller="Home" asp-action="Index" class="btn btn-outline-secondary">
+            🏠 Home
+        </a>
+
+        <form asp-controller="Account" asp-action="Logout" method="post">
+            @Html.AntiForgeryToken()
+            <button class="btn btn-outline-danger">🚪 Logout</button>
+        </form>
+    </div>
+
+    <h2 class="text-success mb-4">⚙ Settings</h2>
+
+    <div class="card p-4 shadow-sm">
+
+        <form asp-action="Save" method="post">
+            @Html.AntiForgeryToken()
+
+            <!-- THEME -->
+            <div class="mb-3">
+                <label class="fw-bold">🎨 Theme</label>
+                <select asp-for="Theme" class="form-select auto-save" id="themeSelect">
+                    <option>Light</option>
+                    <option>Dark</option>
+                </select>
+            </div>
+
+            <!-- NOTIFICATIONS -->
+            <div class="form-check mb-3">
+                <input asp-for="NotificationsEnabled" class="form-check-input auto-save" />
+                <label class="fw-bold">🔔 Notifications</label>
+            </div>
+
+            <!-- AUTO SAVE -->
+            <div class="form-check mb-3">
+                <input asp-for="AutoSaveEnabled" class="form-check-input auto-save" />
+                <label class="fw-bold">💾 Auto Save</label>
+            </div>
+
+            <!-- REMINDER -->
+            <div class="mb-4">
+                <label class="fw-bold">🔔 Reminder</label>
+                <select asp-for="ReminderFrequency" class="form-select auto-save">
+                    <option>Off</option>
+                    <option>Daily</option>
+                    <option>Weekly</option>
+                </select>
+            </div>
+
+            <button class="btn btn-success">Save</button>
+        </form>
+
+    </div>
+
+    <!-- 🔥 DANGER ZONE -->
+    <div class="card mt-5 border-danger p-4">
+
+        <h5 class="text-danger">⚠ Danger Zone</h5>
+
+        <!-- RELOAD BASE -->
+        <form asp-action="ReloadBaseProducts" method="post">
+            @Html.AntiForgeryToken()
+            <button class="btn btn-warning mb-3">
+                🔄 Reload Base Products
+            </button>
+        </form>
+
+        <!-- DELETE ACCOUNT -->
+        <form asp-action="DeleteAccount" method="post"
+              onsubmit="return confirm('Delete account permanently?');">
+            @Html.AntiForgeryToken()
+            <button class="btn btn-danger">
+                🗑 Delete Account
+            </button>
+        </form>
+
+    </div>
+
+</div>
+
+<script>
+document.querySelectorAll(".auto-save").forEach(el => {
+    el.addEventListener("change", () => {
+        el.closest("form").submit();
+    });
+});
+
+// THEME LIVE
+const theme = "@Model.Theme";
+if (theme === "Dark") {
+    document.body.classList.add("dark-mode");
+}
+
+document.getElementById("themeSelect").addEventListener("change", function () {
+    document.body.classList.toggle("dark-mode", this.value === "Dark");
+});
+</script>
