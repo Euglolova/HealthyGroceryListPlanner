@@ -6,11 +6,10 @@ using HealthGroceryListPlanner.Domain.Enums;
 
 namespace HealthGroceryListPlanner.Web.Controllers
 {
-    
-    [Authorize] // 🔥 защита — только для залогиненных
+    // 🔒 Only authenticated users can access products
+    [Authorize]
     public class ProductsController : Controller
     {
-        
         private readonly ProductService _productService;
 
         public ProductsController(ProductService productService)
@@ -30,8 +29,9 @@ namespace HealthGroceryListPlanner.Web.Controllers
 
             return int.Parse(claim.Value);
         }
+
         // =========================
-        // PRODUCTS IN SHOPPING LIST
+        // GET PRODUCTS IN SHOPPING LIST
         // =========================
         public async Task<IActionResult> List(int id)
         {
@@ -95,7 +95,7 @@ namespace HealthGroceryListPlanner.Web.Controllers
         }
 
         // =========================
-        // REMOVE FROM LIST
+        // REMOVE PRODUCT FROM LIST
         // =========================
         [HttpPost]
         public async Task<IActionResult> RemoveFromList(int productId)
@@ -104,11 +104,11 @@ namespace HealthGroceryListPlanner.Web.Controllers
 
             await _productService.RemoveFromList(productId, userId);
 
-            return Redirect(Request.Headers["Referer"].ToString());
+            return RedirectToAction("List", new { id = productId });
         }
 
         // =========================
-        // UPDATE UNIT
+        // UPDATE UNIT TYPE
         // =========================
         [HttpPost]
         public async Task<IActionResult> UpdateUnit(int productId, UnitType unit)
@@ -140,12 +140,76 @@ namespace HealthGroceryListPlanner.Web.Controllers
 
             var userId = GetUserId();
 
-            await _productService.CreateProduct(product, userId); // ✅
+            await _productService.CreateProduct(product, userId);
 
             return RedirectToAction(
                 "Details",
                 "Categories",
                 new { id = product.CategoryId });
         }
+
+        // =========================
+        // DELETE OR HIDE PRODUCT
+        // =========================
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Delete(int id)
+        {
+            // Get current logged-in user ID from claims
+            var userId = GetUserId();
+
+            // Get product by ID (without strict user filtering,
+            // because we need access to global products too)
+            var product = await _productService.GetProductById(id);
+
+            // If product does not exist → return 404
+            if (product == null)
+                return NotFound();
+
+            // =========================
+            // GLOBAL PRODUCT (SEED DATA)
+            // =========================
+            if (product.IsGlobal)
+            {
+                // Do NOT delete from database
+                // Just hide it for this specific user
+                await _productService.HideProduct(id, userId);
+            }
+            else
+            {
+                // =========================
+                // USER PRODUCT
+                // =========================
+
+                // Security check: user can delete ONLY their own products
+                if (product.UserId != userId)
+                    return Forbid();
+
+                // Permanently delete user's own product
+                await _productService.DeleteProduct(id, userId);
+            }
+
+            // Redirect back to category details page
+            return RedirectToAction("Details", "Categories", new { id = product.CategoryId });
+        }
+        // =========================
+        // EDIT PRODUCT (GET)
+        // =========================
+        public async Task<IActionResult> Edit(int id)
+        {
+            var userId = GetUserId();
+
+            var product = await _productService.GetProductById(id);
+
+            if (product == null)
+                return NotFound();
+
+            // 🔒 user can edit ONLY own products
+            if (product.UserId != userId)
+                return Forbid();
+
+            return View(product);
+        }
     }
+    
 }

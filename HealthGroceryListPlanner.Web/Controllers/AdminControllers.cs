@@ -105,7 +105,7 @@ namespace HealthGroceryListPlanner.Web.Controllers
         {
             var currentUserId = GetUserId();
 
-            // 🔥 защита от самоуничтожения
+
             if (id == currentUserId)
                 return BadRequest("You cannot delete yourself");
 

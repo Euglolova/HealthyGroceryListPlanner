@@ -8,7 +8,7 @@ using HealthGroceryListPlanner.Domain.Models;
 namespace HealthGroceryListPlanner.Web.Controllers
 {
     
-    [Authorize] // 🔥 доступ только для залогиненных
+    [Authorize] 
     public class ShoppingListController : Controller
     {
         private int GetUserId()
@@ -36,7 +36,7 @@ namespace HealthGroceryListPlanner.Web.Controllers
 
             var lists = await _context.ShoppingLists
                 .Include(l => l.Products)
-                .Where(l => l.UserId == userId) // 🔥 ВСЕГДА только свои
+                .Where(l => l.UserId == userId) 
                 .OrderByDescending(l => l.CreatedAt)
                 .ToListAsync();
 
@@ -64,7 +64,7 @@ namespace HealthGroceryListPlanner.Web.Controllers
             var userId = GetUserId();
 
             list.CreatedAt = DateTime.Now;
-            list.UserId = userId; // 🔥 привязка к пользователю
+            list.UserId = userId; 
 
             _context.ShoppingLists.Add(list);
             await _context.SaveChangesAsync();
@@ -88,7 +88,7 @@ namespace HealthGroceryListPlanner.Web.Controllers
             if (list == null)
                 return NotFound();
 
-            // 🔥 защита — нельзя удалить чужое
+            
             if (list.UserId != userId && role != "Admin")
             {
                 return Forbid();

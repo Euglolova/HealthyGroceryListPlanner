@@ -95,5 +95,10 @@ namespace HealthGroceryListPlanner.Web.Controllers
                 CookieAuthenticationDefaults.AuthenticationScheme,
                 new ClaimsPrincipal(identity));
         }
+    // ================= ACCESS DENIED =================
+        public IActionResult AccessDenied()
+        {
+            return View();
+        }    
     }
 }

@@ -7,7 +7,7 @@ using HealthGroceryListPlanner.Domain.Models;
 
 namespace HealthGroceryListPlanner.Web.Controllers
 {
-    [Authorize] // 🔥 важно
+    [Authorize]
     public class ProfileController : Controller
     {
         private readonly GroceryContext _context;

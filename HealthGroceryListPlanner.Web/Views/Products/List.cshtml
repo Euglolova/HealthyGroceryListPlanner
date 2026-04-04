@@ -9,8 +9,8 @@
    class="btn btn-success mb-3">
     + Add Product
 </a>
-<div class="mb-3 d-flex gap-2">
 
+<div class="mb-3 d-flex gap-2">
     <a asp-controller="ShoppingList"
        asp-action="Index"
        class="btn btn-info">
@@ -22,7 +22,6 @@
        class="btn btn-secondary">
         Home
     </a>
-
 </div>
 
 <table class="table table-hover">
@@ -40,50 +39,39 @@
 
 @foreach (var product in Model)
 {
-        <tr>
+    <tr>
 
-            <!-- PRODUCT NAME -->
-            <td class="fw-semibold">
-                @product.Name
-            </td>
+        <!-- NAME -->
+        <td class="fw-semibold">
+            @product.Name
+        </td>
 
+        <!-- AMOUNT -->
+        <td>
+            <div class="d-inline-flex align-items-center gap-3">
 
-            <!-- AMOUNT -->
-            <td>
+                <!-- DECREASE -->
+                <form asp-action="DecreaseQuantity" method="post">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="productId" value="@product.Id" />
+                    <button type="submit" class="btn btn-link text-dark p-0 fs-4">−</button>
+                </form>
 
-                <div class="d-inline-flex align-items-center gap-3">
+                <!-- QUANTITY -->
+                <span class="fw-semibold">
+                    @product.Quantity
+                </span>
 
-                    <!-- DECREASE -->
-                    <form asp-action="DecreaseQuantity" method="post">
-                        <input type="hidden" name="productId" value="@product.Id" />
+                <!-- INCREASE -->
+                <form asp-action="IncreaseQuantity" method="post">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="productId" value="@product.Id" />
+                    <button type="submit" class="btn btn-link text-dark p-0 fs-4">+</button>
+                </form>
 
-                        <button type="submit"
-                                class="btn btn-link text-dark p-0 fs-4 text-decoration-none">
-                            −
-                        </button>
-                    </form>
-
-
-                    <!-- QUANTITY -->
-                    <span class="fw-semibold">
-                        @(product.Quantity )
-                    </span>
-
-
-                    <!-- INCREASE -->
-                    <form asp-action="IncreaseQuantity" method="post">
-                        <input type="hidden" name="productId" value="@product.Id" />
-
-                        <button type="submit"
-                                class="btn btn-link text-dark p-0 fs-4 text-decoration-none">
-                            +
-                        </button>
-                    </form>
-
-
-                    <!-- UNIT SELECT -->
+                <!-- UNIT -->
                 <form asp-action="UpdateUnit" method="post">
-
+                    @Html.AntiForgeryToken()
                     <input type="hidden" name="productId" value="@product.Id" />
 
                     <select name="unit"
@@ -108,39 +96,40 @@
                         }
 
                     </select>
-
-                </form>  
-
-
-                </div>
-
-            </td>
-
-
-            <!-- CATEGORY -->
-            <td class="text-muted">
-                @product.Category?.Name
-            </td>
-
-
-            <!-- DELETE BUTTON -->
-            <td class="text-end">
-
-                <form asp-controller="Products"
-                      asp-action="RemoveFromList"
-                      method="post">
-
-                    <input type="hidden" name="productId" value="@product.Id" />
-
-                    <button class="btn btn-danger btn-sm">
-                        Delete
-                    </button>
-
                 </form>
 
-            </td>
+            </div>
+        </td>
 
-        </tr>
+        <!-- CATEGORY -->
+        <td class="text-muted">
+            @product.Category?.Name
+        </td>
+
+        <!-- REMOVE FROM LIST -->
+        <td class="text-end">
+            <form asp-controller="Products"
+                asp-action="RemoveFromList"
+                method="post"
+                style="display:inline;">
+
+                @Html.AntiForgeryToken()
+
+                <input type="hidden" name="productId" value="@product.Id" />
+
+                <!-- 🔥 ВОТ ЭТО ДОБАВЬ -->
+                <input type="hidden" name="shoppingListId" value="@ViewBag.ShoppingListId" />
+
+                <button type="submit"
+                        class="btn btn-danger btn-sm"
+                        onclick="return confirm('Remove this product from the list?')">
+                    Delete
+                </button>
+
+            </form>
+        </td>
+
+    </tr>
 }
 
     </tbody>

@@ -15,6 +15,7 @@ namespace HealthGroceryListPlanner.Infrastructure.Data
         public DbSet<ShoppingList> ShoppingLists { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<UserSettings> UserSettings { get; set; }
+        public DbSet<UserHiddenProduct> UserHiddenProducts { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -84,32 +85,32 @@ namespace HealthGroceryListPlanner.Infrastructure.Data
             modelBuilder.Entity<Product>().HasData(
 
                 // Vegetables
-                new Product { Id = 201, Name = "Carrot", Emoji="🥕", Quantity=1, Unit=0, CategoryId=1, IsPurchased=false, IsGlobal=true },
-                new Product { Id = 202, Name = "Potato", Emoji="🥔", Quantity=1, Unit=0, CategoryId=1, IsPurchased=false, IsGlobal=true },
-                new Product { Id = 203, Name = "Tomato", Emoji="🍅", Quantity=1, Unit=0, CategoryId=1, IsPurchased=false, IsGlobal=true },
+                new Product { Id = 201, Name = "Carrot", Emoji = "🥕", Quantity = 1, Unit = 0, CategoryId = 1, IsPurchased = false, IsGlobal = true },
+                new Product { Id = 202, Name = "Potato", Emoji = "🥔", Quantity = 1, Unit = 0, CategoryId = 1, IsPurchased = false, IsGlobal = true },
+                new Product { Id = 203, Name = "Tomato", Emoji = "🍅", Quantity = 1, Unit = 0, CategoryId = 1, IsPurchased = false, IsGlobal = true },
 
                 // Fruits
-                new Product { Id = 301, Name = "Apple", Emoji="🍎", Quantity=1, Unit=0, CategoryId=2, IsPurchased=false, IsGlobal=true },
-                new Product { Id = 302, Name = "Banana", Emoji="🍌", Quantity=1, Unit=0, CategoryId=2, IsPurchased=false, IsGlobal=true },
+                new Product { Id = 301, Name = "Apple", Emoji = "🍎", Quantity = 1, Unit = 0, CategoryId = 2, IsPurchased = false, IsGlobal = true },
+                new Product { Id = 302, Name = "Banana", Emoji = "🍌", Quantity = 1, Unit = 0, CategoryId = 2, IsPurchased = false, IsGlobal = true },
 
                 // Protein
-                new Product { Id = 401, Name = "Chicken Breast", Emoji="🍗", Quantity=1, Unit=0, CategoryId=3, IsPurchased=false, IsGlobal=true },
-                new Product { Id = 402, Name = "Salmon", Emoji="🐟", Quantity=1, Unit=0, CategoryId=3, IsPurchased=false, IsGlobal=true },
+                new Product { Id = 401, Name = "Chicken Breast", Emoji = "🍗", Quantity = 1, Unit = 0, CategoryId = 3, IsPurchased = false, IsGlobal = true },
+                new Product { Id = 402, Name = "Salmon", Emoji = "🐟", Quantity = 1, Unit = 0, CategoryId = 3, IsPurchased = false, IsGlobal = true },
 
                 // Dairy
-                new Product { Id = 501, Name = "Milk", Emoji="🥛", Quantity=1, Unit=0, CategoryId=4, IsPurchased=false, IsGlobal=true },
+                new Product { Id = 501, Name = "Milk", Emoji = "🥛", Quantity = 1, Unit = 0, CategoryId = 4, IsPurchased = false, IsGlobal = true },
 
                 // Grains
-                new Product { Id = 601, Name = "Oats", Emoji="🥣", Quantity=1, Unit=0, CategoryId=5, IsPurchased=false, IsGlobal=true },
+                new Product { Id = 601, Name = "Oats", Emoji = "🥣", Quantity = 1, Unit = 0, CategoryId = 5, IsPurchased = false, IsGlobal = true },
 
                 // Nuts
-                new Product { Id = 701, Name = "Almonds", Emoji="🌰", Quantity=1, Unit=0, CategoryId=6, IsPurchased=false, IsGlobal=true },
+                new Product { Id = 701, Name = "Almonds", Emoji = "🌰", Quantity = 1, Unit = 0, CategoryId = 6, IsPurchased = false, IsGlobal = true },
 
                 // Fats
-                new Product { Id = 801, Name = "Avocado", Emoji="🥑", Quantity=1, Unit=0, CategoryId=7, IsPurchased=false, IsGlobal=true },
+                new Product { Id = 801, Name = "Avocado", Emoji = "🥑", Quantity = 1, Unit = 0, CategoryId = 7, IsPurchased = false, IsGlobal = true },
 
                 // Drinks
-                new Product { Id = 901, Name = "Coffee", Emoji="☕", Quantity=1, Unit=0, CategoryId=8, IsPurchased=false, IsGlobal=true }
+                new Product { Id = 901, Name = "Coffee", Emoji = "☕", Quantity = 1, Unit = 0, CategoryId = 8, IsPurchased = false, IsGlobal = true }
             );
         }
     }

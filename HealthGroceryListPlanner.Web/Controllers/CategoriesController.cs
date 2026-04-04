@@ -6,10 +6,10 @@ using HealthGroceryListPlanner.Domain.Models;
 
 namespace HealthGroceryListPlanner.Web.Controllers
 {
-    [Authorize] // 🔥 только для залогиненных
+    // 🔒 Only authenticated users can access categories
+    [Authorize]
     public class CategoriesController : Controller
     {
-    
         private readonly GroceryContext _context;
         private readonly IWebHostEnvironment _environment;
 
@@ -39,9 +39,11 @@ namespace HealthGroceryListPlanner.Web.Controllers
         {
             var userId = GetUserId();
 
+            // Get categories (global + user-owned, excluding deleted)
             var categories = await _context.Categories
-                .Where(c => c.IsGlobal || c.UserId == userId)
+                .Where(c => !c.IsDeleted && (c.IsGlobal || c.UserId == userId))
                 .OrderBy(c => c.Name)
+                .AsNoTracking()
                 .ToListAsync();
 
             return View(categories);
@@ -54,18 +56,33 @@ namespace HealthGroceryListPlanner.Web.Controllers
         {
             var userId = GetUserId();
 
+            // Get category with products
             var category = await _context.Categories
                 .Include(c => c.Products)
                 .FirstOrDefaultAsync(c =>
                     c.Id == id &&
+                    !c.IsDeleted &&
                     (c.IsGlobal || c.UserId == userId));
 
             if (category == null)
                 return NotFound();
 
-            // 🔥 фильтр продуктов
+            // =========================
+            // GET HIDDEN PRODUCTS FOR USER
+            // =========================
+            var hiddenIds = await _context.UserHiddenProducts
+                .Where(h => h.UserId == userId)
+                .Select(h => h.ProductId)
+                .ToListAsync();
+
+            // =========================
+            // FILTER PRODUCTS
+            // =========================
             category.Products = category.Products
-                .Where(p => p.IsGlobal || p.UserId == userId)
+                .Where(p =>
+                    (p.IsGlobal || p.UserId == userId) && // user + global
+                    p.ShoppingListId == null &&          
+                    !hiddenIds.Contains(p.Id))            // exclude hidden
                 .OrderBy(p => p.Name)
                 .ToList();
 
@@ -75,14 +92,11 @@ namespace HealthGroceryListPlanner.Web.Controllers
         // =========================
         // CREATE CATEGORY
         // =========================
-
-        // GET
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Category category, IFormFile? imageFile)
@@ -92,7 +106,7 @@ namespace HealthGroceryListPlanner.Web.Controllers
 
             var userId = GetUserId();
 
-            // 🔥 привязка к пользователю
+            // Assign ownership
             category.UserId = userId;
             category.IsGlobal = false;
 
@@ -106,19 +120,17 @@ namespace HealthGroceryListPlanner.Web.Controllers
                 if (!Directory.Exists(uploadsFolder))
                     Directory.CreateDirectory(uploadsFolder);
 
-                var fileName = Guid.NewGuid().ToString() + Path.GetExtension(imageFile.FileName);
+                var fileName = Guid.NewGuid() + Path.GetExtension(imageFile.FileName);
                 var filePath = Path.Combine(uploadsFolder, fileName);
 
-                using (var stream = new FileStream(filePath, FileMode.Create))
-                {
-                    await imageFile.CopyToAsync(stream);
-                }
+                using var stream = new FileStream(filePath, FileMode.Create);
+                await imageFile.CopyToAsync(stream);
 
                 category.ImageUrl = "/images/" + fileName;
             }
             else
             {
-                // fallback
+                // Default image fallback
                 category.ImageUrl = "/images/default.jpg";
             }
 
@@ -129,7 +141,7 @@ namespace HealthGroceryListPlanner.Web.Controllers
         }
 
         // =========================
-        // DELETE CATEGORY
+        // DELETE CATEGORY (SOFT DELETE)
         // =========================
 
         // GET
@@ -138,13 +150,18 @@ namespace HealthGroceryListPlanner.Web.Controllers
             var userId = GetUserId();
 
             var category = await _context.Categories
-                .FirstOrDefaultAsync(c =>
-                    c.Id == id &&
-                    c.UserId == userId &&
-                    !c.IsGlobal); // 🔥 нельзя удалить системные
+                .AsNoTracking()
+                .FirstOrDefaultAsync(c => c.Id == id);
 
             if (category == null)
                 return NotFound();
+
+            if (category.IsDeleted)
+                return NotFound();
+
+            // Security: user can delete only their own categories
+            if (category.UserId != userId)
+                return Forbid();
 
             return View(category);
         }
@@ -157,16 +174,17 @@ namespace HealthGroceryListPlanner.Web.Controllers
             var userId = GetUserId();
 
             var category = await _context.Categories
-                .FirstOrDefaultAsync(c =>
-                    c.Id == id &&
-                    c.UserId == userId &&
-                    !c.IsGlobal);
+                .FirstOrDefaultAsync(c => c.Id == id);
 
-            if (category != null)
-            {
-                _context.Categories.Remove(category);
-                await _context.SaveChangesAsync();
-            }
+            if (category == null)
+                return NotFound();
+
+            if (category.UserId != userId)
+                return Forbid();
+
+            // Soft delete (hide category instead of removing from DB)
+            category.IsDeleted = true;
+            await _context.SaveChangesAsync();
 
             return RedirectToAction(nameof(Index));
         }

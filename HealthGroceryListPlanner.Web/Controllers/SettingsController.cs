@@ -1,14 +1,14 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Authentication; // 🔥 важно
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.EntityFrameworkCore;
 using HealthGroceryListPlanner.Infrastructure.Data;
 using HealthGroceryListPlanner.Domain.Models;
 
 namespace HealthGroceryListPlanner.Web.Controllers
 {
-    [Authorize] // 🔥 только для авторизованных
-    public class SettingsController : Controller
+    [Authorize] 
+        public class SettingsController : Controller
     {
         private readonly GroceryContext _context;
 
@@ -40,7 +40,6 @@ namespace HealthGroceryListPlanner.Web.Controllers
             var settings = await _context.UserSettings
                 .FirstOrDefaultAsync(s => s.UserId == userId);
 
-            // 🔥 создаём если нет
             if (settings == null)
             {
                 settings = new UserSettings

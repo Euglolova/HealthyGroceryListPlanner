@@ -15,6 +15,7 @@ namespace HealthGroceryListPlanner.Domain.Models
         public User? User { get; set; }
 
         public bool IsGlobal { get; set; } = false;
+        public bool IsDeleted { get; set; } = false;
 
         public List<Product> Products { get; set; } = new List<Product>();
     }
